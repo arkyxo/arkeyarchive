@@ -762,7 +762,6 @@ function App() {
   const [projectSearch, setProjectSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [showAllProjects, setShowAllProjects] = useState(false);
-  const [activeExpIndex, setActiveExpIndex] = useState(0);
   const [showTop, setShowTop] = useState(false);
   const [openCertCategories, setOpenCertCategories] = useState([]);
 
@@ -1208,45 +1207,62 @@ function App() {
       {/* EXPERIENCE */}
       <section id="experience" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <SectionHeading eyebrow="05 · TIMELINE" title="Experience" t={t} />
-        <div className="flex flex-col sm:flex-row gap-1 sm:gap-8">
-          {/* Tab list */}
-          <div className={`flex sm:flex-col overflow-x-auto sm:overflow-visible border-b sm:border-b-0 sm:border-l ${t.border} sm:w-52 shrink-0`}>
-            {EXPERIENCE.map((exp, i) => {
-              const active = i === activeExpIndex;
-              return (
-                <button
-                  key={exp.position}
-                  onClick={() => setActiveExpIndex(i)}
-                  className={`relative shrink-0 text-left px-4 py-3 font-mono text-xs tracking-wide whitespace-nowrap sm:whitespace-normal border-b-2 sm:border-b-0 sm:border-l-2 -mb-px sm:-ml-px transition-colors ${
-                    active
-                      ? `${t.accent} border-red-400 ${isDark ? "bg-slate-900/40" : "bg-red-50/60"}`
-                      : `${t.textFaint} border-transparent hover:${t.textMuted}`
-                  }`}
-                >
-                  {exp.position}
-                </button>
-              );
-            })}
-          </div>
 
-          {/* Content panel */}
-          <div className="flex-1 min-w-0 pt-6 sm:pt-1">
+        <div className="relative">
+          {/* Center spine (desktop) / left spine (mobile) */}
+          <div className={`absolute top-0 bottom-0 left-4 sm:left-1/2 w-px ${t.border} sm:-translate-x-1/2`} />
+
+          <div className="space-y-10 sm:space-y-4">
             {EXPERIENCE.map((exp, i) => {
-              if (i !== activeExpIndex) return null;
+              const onRight = i % 2 === 1;
               return (
-                <Reveal key={exp.position}>
-                  <p className={`font-mono text-xs tracking-wider ${t.textFaint} mb-1`}>
-                    {exp.type.toUpperCase()} · {exp.duration.toUpperCase()}
-                  </p>
-                  <h3 className="font-display font-semibold text-lg mb-0.5">{exp.company}</h3>
-                  <ul className="mt-3 mb-4 space-y-2.5 max-w-2xl">
-                    {exp.bullets.map((bullet, bi) => (
-                      <li key={bi} className={`font-body text-sm ${t.textMuted} flex gap-2`}>
-                        <span className="text-red-400 mt-0.5 shrink-0">▶</span>
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <Reveal key={exp.position} delay={i * 80} className="relative sm:grid sm:grid-cols-2 sm:gap-10">
+                  {/* Node on the spine */}
+                  <span
+                    className={`absolute top-1.5 left-4 sm:left-1/2 h-3 w-3 -translate-x-1/2 rounded-full ${t.accentBg} dot-glow-red ring-4 ${isDark ? "ring-slate-950" : "ring-slate-50"} z-10`}
+                  />
+
+                  {/* Spacer column keeps the grid alternating on desktop */}
+                  <div className={`hidden sm:block ${onRight ? "" : "order-2"}`} />
+
+                  <div
+                    className={`pl-12 sm:pl-0 ${
+                      onRight ? "sm:pl-10" : "sm:pr-10 sm:text-right sm:order-1"
+                    }`}
+                  >
+                    <p className={`font-mono text-xs tracking-wider ${t.accent} mb-1`}>
+                      {exp.duration.toUpperCase()}
+                    </p>
+                    <h3 className="font-display font-semibold text-lg mb-0.5">{exp.company}</h3>
+                    <p className={`font-mono text-xs tracking-wide ${t.textFaint} mb-3`}>
+                      {exp.position} · {exp.type}
+                    </p>
+                    <ul className={`space-y-2.5 max-w-md ${onRight ? "" : "sm:ml-auto"}`}>
+                      {exp.bullets.map((bullet, bi) => (
+                        <li
+                          key={bi}
+                          className={`font-body text-sm ${t.textMuted} flex gap-2 ${
+                            onRight ? "" : "sm:flex-row-reverse sm:text-right"
+                          }`}
+                        >
+                          <span className="text-red-400 mt-0.5 shrink-0">▶</span>
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {exp.tech && exp.tech.length > 0 && (
+                      <div className={`flex flex-wrap gap-2 mt-4 ${onRight ? "" : "sm:justify-end"}`}>
+                        {exp.tech.map((tag) => (
+                          <span
+                            key={tag}
+                            className={`font-mono text-[11px] tracking-wide px-2.5 py-1 rounded-full border ${t.border} ${t.surface} ${t.textFaint}`}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </Reveal>
               );
             })}
