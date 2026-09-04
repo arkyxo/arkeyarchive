@@ -51,6 +51,8 @@ const X = makeIcon(<><path d="M18 6 6 18" /><path d="m6 6 12 12" /></>);
 const MapPin = makeIcon(<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>);
 const ImageIcon = makeIcon(<><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.1-3.1a2 2 0 0 0-2.83 0L6 21" /></>);
 const ArrowRight = makeIcon(<><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>);
+const User = makeIcon(<><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></>);
+const Wrench = makeIcon(<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />);
 
 /* ============================================================
    EDIT ME — replace with your real details before publishing
@@ -86,6 +88,7 @@ const SKILL_LEVELS = {
 const SKILLS = [
   {
     category: "Networking Skills",
+    blurb: "VLANs & Routing, Cisco IOS, Server Administration",
     icon: Network,
     items: [
       { name: "VLANs & Inter-VLAN Routing", level: "basic" },
@@ -98,6 +101,7 @@ const SKILLS = [
   },
   {
     category: "Web Skills",
+    blurb: "React UIs, REST APIs, Firebase",
     icon: Code2,
     items: [
       { name: "Firebase / Firestore", level: "basic" },
@@ -554,12 +558,14 @@ function renderDescription(description, t) {
   );
 }
 
-function SectionHeading({ eyebrow, title, subtitle, t }) {
+function SectionHeading({ eyebrow, title, subtitle, icon: Icon, t }) {
   return (
-    <div className="mb-10 sm:mb-14">
-      <p className={`font-mono text-xs tracking-widest ${t.accent} mb-3`}>{eyebrow}</p>
-      <h2 className={`font-display text-2xl sm:text-3xl font-semibold ${t.text} mb-2`}>{title}</h2>
-      {subtitle && <p className={`font-body text-sm ${t.textMuted} max-w-xl`}>{subtitle}</p>}
+    <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
+      <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
+        {Icon && <Icon size={13} />} {eyebrow}
+      </p>
+      <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text} mb-2`}>{title}</h2>
+      {subtitle && <p className={`font-body text-sm sm:text-base ${t.textMuted} mx-auto`}>{subtitle}</p>}
     </div>
   );
 }
@@ -647,8 +653,12 @@ function GithubActivity({ t, isDark }) {
   return (
     <section id="github-activity" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
       <Reveal>
-        <p className={`font-mono text-xs tracking-widest ${t.accent} mb-3`}>06 · GITHUB</p>
-        <h2 className={`font-display text-2xl sm:text-3xl font-semibold ${t.text} mb-8 sm:mb-10`}>Github Activity</h2>
+        <div className="text-center mb-8 sm:mb-10">
+          <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
+            <Github size={13} /> 06 · GITHUB
+          </p>
+          <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text}`}>Github Activity</h2>
+        </div>
       </Reveal>
 
       <Reveal>
@@ -954,8 +964,10 @@ function App() {
       <section id="about" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <div className="grid sm:grid-cols-2 gap-12">
           <Reveal>
-            <p className={`font-mono text-xs tracking-widest ${t.accent} mb-3`}>01 · WHO I AM</p>
-            <h2 className={`font-display text-2xl sm:text-3xl font-semibold ${t.text} mb-6`}>About Me</h2>
+            <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
+              <User size={13} /> 01 · WHO I AM
+            </p>
+            <h2 className={`font-display text-2xl sm:text-3xl font-bold ${t.text} mb-6`}>About Me</h2>
             <p className={`font-body leading-relaxed ${t.textMuted}`}>
               Hi, I'm <span className={`font-semibold ${t.text}`}>{PROFILE.name}</span>. I'm passionate about
               building, securing, and managing reliable computer networks while developing scalable and
@@ -988,9 +1000,21 @@ function App() {
       {/* SKILLS */}
       <section id="skills" className={`${t.bgSoft} border-y ${t.border}`}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-          <SectionHeading eyebrow="02 · TOOLKIT" title="Technical Skills" t={t} />
           <Reveal>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 -mt-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-4`}>
+                <Wrench size={13} /> 02 · TOOLKIT
+              </p>
+              <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text} mb-4`}>Technical Skills</h2>
+              <p className={`font-body text-sm sm:text-base ${t.textMuted}`}>
+                Practical skills spanning full-stack web development and computer network engineering,
+                built through coursework, labs, and hands-on projects.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-10">
               {SKILL_LEGEND.map((lvl) => {
                 const meta = SKILL_LEVELS[lvl];
                 return (
@@ -1002,28 +1026,42 @@ function App() {
               })}
             </div>
           </Reveal>
-          <div className="space-y-10">
+
+          <div className="grid sm:grid-cols-2 gap-5">
             {SKILLS.map((group, i) => {
               const Icon = group.icon;
               return (
                 <Reveal key={group.category} delay={i * 80}>
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <Icon size={16} className={t.accent} />
-                    <h3 className={`font-display font-semibold ${t.text}`}>{group.category}</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2.5">
-                    {group.items.map((item) => {
-                      const lvl = SKILL_LEVELS[item.level];
-                      return (
-                        <span
-                          key={item.name}
-                          className={`inline-flex items-center gap-2 pl-3 pr-3.5 py-2 rounded-full border ${t.border} ${t.surface} hover:border-red-400/50 transition-colors`}
-                        >
-                          <span className={`h-1.5 w-1.5 rounded-full ${lvl.dot} shrink-0`} />
-                          <span className={`font-mono text-xs ${t.text}`}>{item.name}</span>
-                        </span>
-                      );
-                    })}
+                  <div className={`h-full rounded-xl border ${t.border} ${t.surface} p-6 card-glow`}>
+                    <div className="flex items-center gap-3 mb-1.5">
+                      <span
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border ${t.border} ${
+                          isDark ? "bg-slate-800/60" : "bg-slate-50"
+                        } ${t.accent}`}
+                      >
+                        <Icon size={17} />
+                      </span>
+                      <h3 className={`font-display font-semibold ${t.text}`}>{group.category}</h3>
+                    </div>
+                    <p className={`font-mono text-[11px] tracking-wide ${t.textFaint} mb-5 ml-12`}>
+                      {group.blurb}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {group.items.map((item) => {
+                        const lvl = SKILL_LEVELS[item.level];
+                        return (
+                          <span
+                            key={item.name}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border ${t.border} ${
+                              isDark ? "bg-slate-950/40" : "bg-slate-50"
+                            } hover:border-red-400/50 transition-colors`}
+                          >
+                            <span className={`h-1.5 w-1.5 rounded-full ${lvl.dot} shrink-0`} />
+                            <span className={`font-mono text-[11px] ${lvl.text}`}>{item.name}</span>
+                          </span>
+                        );
+                      })}
+                    </div>
                   </div>
                 </Reveal>
               );
@@ -1034,25 +1072,25 @@ function App() {
 
       {/* PROJECTS (Labs + Web Applications) */}
       <section id="labs" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-        <div className="mb-10 sm:mb-14">
-          <p className={`font-mono text-xs tracking-widest ${t.accent} mb-3`}>
-            {projectTab === "labs" ? "03 · HOMELAB LOG" : "03 · BUILD LOG"}
+        <div className="text-center mb-10 sm:mb-14">
+          <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
+            <Code2 size={13} /> {projectTab === "labs" ? "03 · HOMELAB LOG" : "03 · BUILD LOG"}
           </p>
-          <div className="flex flex-wrap items-baseline gap-3">
+          <div className="flex flex-wrap items-baseline justify-center gap-3">
             <button
               onClick={() => switchProjectTab("labs")}
               aria-pressed={projectTab === "labs"}
-              className={`font-display text-2xl sm:text-3xl font-semibold pb-1 border-b-2 transition-colors ${
+              className={`font-display text-2xl sm:text-3xl font-bold pb-1 border-b-2 transition-colors ${
                 projectTab === "labs" ? `${t.text} border-red-400` : `${t.textFaint} border-transparent hover:${t.textMuted}`
               }`}
             >
               Lab Projects
             </button>
-            <span className={`font-display text-2xl sm:text-3xl font-semibold ${t.textFaint}`}>/</span>
+            <span className={`font-display text-2xl sm:text-3xl font-bold ${t.textFaint}`}>/</span>
             <button
               onClick={() => switchProjectTab("webapps")}
               aria-pressed={projectTab === "webapps"}
-              className={`font-display text-2xl sm:text-3xl font-semibold pb-1 border-b-2 transition-colors ${
+              className={`font-display text-2xl sm:text-3xl font-bold pb-1 border-b-2 transition-colors ${
                 projectTab === "webapps" ? `${t.text} border-red-400` : `${t.textFaint} border-transparent hover:${t.textMuted}`
               }`}
             >
@@ -1120,7 +1158,7 @@ function App() {
       {/* CERTIFICATIONS */}
       <section id="certifications" className={`${t.bgSoft} border-y ${t.border}`}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-          <SectionHeading eyebrow="04 · CREDENTIALS" title="Certifications" t={t} />
+          <SectionHeading eyebrow="04 · CREDENTIALS" title="Certifications" icon={CheckCircle2} t={t} />
           {Object.entries(
             CERTIFICATIONS.reduce((groups, cert) => {
               const key = cert.category || "Other";
@@ -1194,7 +1232,7 @@ function App() {
 
       {/* EXPERIENCE */}
       <section id="experience" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-        <SectionHeading eyebrow="05 · TIMELINE" title="Experience" t={t} />
+        <SectionHeading eyebrow="05 · TIMELINE" title="Experience" icon={Briefcase} t={t} />
 
         <div className="relative">
           {/* Center spine (desktop) / left spine (mobile) */}
