@@ -274,12 +274,8 @@ const EXPERIENCE = [
     position: "SPES",
     duration: "2026",
     type: "Government Program",
-    bullets: [
-      "Provided basic IT assistance, hardware troubleshooting, and office technical support.",
-      "Managed administrative data entry tasks while balancing rigorous Computer Engineering coursework.",
-      "Assisted department personnel with digital filing and software configurations.",
-    ],
-    tech: ["Basic IT Assistance"],
+    description:
+      "Provided IT support and hardware troubleshooting, and handled data entry and digital filing for the department — all while studying Computer Engineering full-time.",
   },
 ];
 
@@ -897,18 +893,8 @@ function App() {
             </h1>
           </Reveal>
 
-          <Reveal delay={170}>
-            <p className={`max-w-2xl font-body text-base sm:text-lg leading-relaxed ${t.textMuted} mb-10`}>
-              Hi, I'm <span className={`font-semibold ${t.text}`}>{PROFILE.name}</span>. I'm passionate about
-              building, securing, and managing reliable computer networks while developing scalable and
-              efficient web applications. My interests span network engineering and full-stack development.
-              I'm continuously expanding my skills to bridge infrastructure and software, with a focus on
-              creating secure, efficient, and reliable technology solutions.
-            </p>
-          </Reveal>
-
           <Reveal delay={220}>
-            <div className="flex flex-wrap items-center gap-3 mb-8">
+            <div className="flex flex-wrap items-center gap-3 mb-8 mt-10">
               <button
                 onClick={() => scrollToId("labs")}
                 className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 font-display font-semibold text-sm ${t.accentBg} text-slate-950 hover:opacity-90 transition-opacity`}
@@ -971,9 +957,11 @@ function App() {
             <p className={`font-mono text-xs tracking-widest ${t.accent} mb-3`}>01 · WHO I AM</p>
             <h2 className={`font-display text-2xl sm:text-3xl font-semibold ${t.text} mb-6`}>About Me</h2>
             <p className={`font-body leading-relaxed ${t.textMuted}`}>
-              I'm Arkey, a 4th-year BS Computer Engineering student at the University of Rizal System – Antipolo
-              Campus. Alongside my coursework, I develop end-to-end web applications — including a POS system, a
-              tracker website, and other applications integrating third-party APIs.
+              Hi, I'm <span className={`font-semibold ${t.text}`}>{PROFILE.name}</span>. I'm passionate about
+              building, securing, and managing reliable computer networks while developing scalable and
+              efficient web applications. My interests span network engineering and full-stack development.
+              I'm continuously expanding my skills to bridge infrastructure and software, with a focus on
+              creating secure, efficient, and reliable technology solutions.
             </p>
           </Reveal>
           <div>
@@ -1237,31 +1225,13 @@ function App() {
                     <p className={`font-mono text-xs tracking-wide ${t.textFaint} mb-3`}>
                       {exp.position} · {exp.type}
                     </p>
-                    <ul className={`space-y-2.5 max-w-md ${onRight ? "" : "sm:ml-auto"}`}>
-                      {exp.bullets.map((bullet, bi) => (
-                        <li
-                          key={bi}
-                          className={`font-body text-sm ${t.textMuted} flex gap-2 ${
-                            onRight ? "" : "sm:flex-row-reverse sm:text-right"
-                          }`}
-                        >
-                          <span className="text-red-400 mt-0.5 shrink-0">▶</span>
-                          <span>{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    {exp.tech && exp.tech.length > 0 && (
-                      <div className={`flex flex-wrap gap-2 mt-4 ${onRight ? "" : "sm:justify-end"}`}>
-                        {exp.tech.map((tag) => (
-                          <span
-                            key={tag}
-                            className={`font-mono text-[11px] tracking-wide px-2.5 py-1 rounded-full border ${t.border} ${t.surface} ${t.textFaint}`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                    <p
+                      className={`font-body text-sm leading-relaxed ${t.textMuted} max-w-md ${
+                        onRight ? "" : "sm:ml-auto"
+                      }`}
+                    >
+                      {exp.description}
+                    </p>
                   </div>
                 </Reveal>
               );
