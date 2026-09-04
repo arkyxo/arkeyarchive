@@ -558,7 +558,7 @@ function renderDescription(description, t) {
   );
 }
 
-function SectionHeading({ eyebrow, title, subtitle, icon: Icon, t }) {
+function SectionHeading({ eyebrow, title, subtitle, caption, icon: Icon, t }) {
   return (
     <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
       <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
@@ -566,6 +566,7 @@ function SectionHeading({ eyebrow, title, subtitle, icon: Icon, t }) {
       </p>
       <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text} mb-2`}>{title}</h2>
       {subtitle && <p className={`font-body text-sm sm:text-base ${t.textMuted} mx-auto`}>{subtitle}</p>}
+      {caption && <p className={`font-mono text-xs ${t.textFaint} mt-3`}>{caption}</p>}
     </div>
   );
 }
@@ -658,6 +659,9 @@ function GithubActivity({ t, isDark }) {
             <Github size={13} /> 06 · GITHUB
           </p>
           <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text}`}>Github Activity</h2>
+          <p className={`font-mono text-xs ${t.textFaint} mt-3`}>
+            Live contribution data pulled directly from GitHub.
+          </p>
         </div>
       </Reveal>
 
@@ -998,7 +1002,7 @@ function App() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" className={`${t.bgSoft} border-y ${t.border}`}>
+      <section id="skills" className={t.bg}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
           <Reveal>
             <div className="text-center max-w-2xl mx-auto mb-12">
@@ -1006,7 +1010,7 @@ function App() {
                 <Wrench size={13} /> 02 · TOOLKIT
               </p>
               <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text} mb-4`}>Technical Skills</h2>
-              <p className={`font-body text-sm sm:text-base ${t.textMuted}`}>
+              <p className={`font-mono text-xs ${t.textFaint}`}>
                 Practical skills spanning full-stack web development and computer network engineering,
                 built through coursework, labs, and hands-on projects.
               </p>
@@ -1156,9 +1160,15 @@ function App() {
       </section>
 
       {/* CERTIFICATIONS */}
-      <section id="certifications" className={`${t.bgSoft} border-y ${t.border}`}>
+      <section id="certifications" className={t.bg}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-          <SectionHeading eyebrow="04 · CREDENTIALS" title="Certifications" icon={CheckCircle2} t={t} />
+          <SectionHeading
+            eyebrow="04 · CREDENTIALS"
+            title="Certifications"
+            caption="Click a badge to verify the credential."
+            icon={CheckCircle2}
+            t={t}
+          />
           {Object.entries(
             CERTIFICATIONS.reduce((groups, cert) => {
               const key = cert.category || "Other";
@@ -1232,7 +1242,13 @@ function App() {
 
       {/* EXPERIENCE */}
       <section id="experience" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-        <SectionHeading eyebrow="05 · TIMELINE" title="Experience" icon={Briefcase} t={t} />
+        <SectionHeading
+          eyebrow="05 · TIMELINE"
+          title="Experience"
+          caption="A timeline of roles and hands-on programs."
+          icon={Briefcase}
+          t={t}
+        />
 
         <div className="relative">
           {/* Center spine (desktop) / left spine (mobile) */}
