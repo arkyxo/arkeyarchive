@@ -774,6 +774,9 @@ function App() {
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const [openCertCategories, setOpenCertCategories] = useState([]);
+  const [booting, setBooting] = useState(true);
+  const [bootScreenMounted, setBootScreenMounted] = useState(true);
+  const [bootBar, setBootBar] = useState(0);
 
   const toggleCertCategory = useCallback((category) => {
     setOpenCertCategories((prev) =>
@@ -796,6 +799,27 @@ function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Boot / loading screen: fill the progress bar, then fade the overlay out,
+  // then unmount it entirely once the fade transition finishes.
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setBootBar(100));
+    const hideTimer = setTimeout(() => setBooting(false), 3000);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (booting) {
+      document.body.classList.add("overflow-hidden");
+      return;
+    }
+    document.body.classList.remove("overflow-hidden");
+    const unmountTimer = setTimeout(() => setBootScreenMounted(false), 500);
+    return () => clearTimeout(unmountTimer);
+  }, [booting]);
 
   const mailtoUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${PROFILE.email}&su=${encodeURIComponent(
     "Let's connect — Network Engineering Opportunity"
@@ -824,6 +848,32 @@ function App() {
 
   return (
     <div className={`min-h-screen ${t.bg} ${t.text} transition-colors duration-300`}>
+
+      {/* BOOT / LOADING SCREEN */}
+      {bootScreenMounted && (
+        <div
+          className={`fixed inset-0 z-[70] flex flex-col items-center justify-center gap-6 ${t.bg} transition-opacity duration-500 ${
+            booting ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <span className={`h-2 w-2 rounded-full ${t.accentBg} animate-blink`} />
+            <span className="font-display font-semibold text-xl tracking-tight">
+              {PROFILE.name}
+              <span className="text-red-400">.</span>
+            </span>
+          </div>
+          <p className={`font-mono text-xs tracking-widest ${t.textFaint}`}>
+            <span className="text-red-400">$</span> booting system<span className="animate-blink">_</span>
+          </p>
+          <div className={`h-[2px] w-40 rounded-full overflow-hidden ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
+            <div
+              className={`h-full ${t.accentBg} transition-all duration-[3000ms] ease-out`}
+              style={{ width: `${bootBar}%` }}
+            />
+          </div>
+        </div>
+      )}
 
 
       {/* Scroll progress bar */}
@@ -908,27 +958,31 @@ function App() {
           </Reveal>
 
           <Reveal delay={220}>
-            <div className="flex flex-wrap items-center gap-3 mb-8 mt-10">
+            <div className="flex flex-col gap-3 mb-8 mt-10 sm:flex-row sm:flex-wrap sm:items-center">
               <button
                 onClick={() => scrollToId("labs")}
-                className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 font-display font-semibold text-sm ${t.accentBg} text-slate-950 hover:opacity-90 transition-opacity`}
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-display font-semibold text-sm ${t.accentBg} text-slate-950 hover:opacity-90 transition-opacity`}
               >
                 <Network size={15} /> View My Projects
               </button>
-              <button
-                onClick={() => scrollToId("certifications")}
-                className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 font-display font-semibold text-sm border ${t.border} ${t.text} hover:${t.accent} transition-colors`}
-              >
-                <CheckCircle2 size={15} /> View My Certificates
-              </button>
-              <a
-                href={PROFILE.resumeUrl}
-                target="_blank"
-                rel="noreferrer"
-                className={`inline-flex items-center gap-2 rounded-lg px-5 py-2.5 font-mono text-xs tracking-wide border ${t.border} ${t.textMuted} hover:${t.accent} transition-colors`}
-              >
-                [ Download Resume.pdf ] <Download size={13} />
-              </a>
+              <div className="flex gap-3 sm:contents">
+                <button
+                  onClick={() => scrollToId("certifications")}
+                  className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-display font-semibold text-sm border ${t.border} ${t.text} hover:${t.accent} transition-colors`}
+                >
+                  <CheckCircle2 size={15} /> View My Certificates
+                </button>
+                <a
+                  href={PROFILE.resumeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-mono text-xs tracking-wide border ${t.border} ${t.textMuted} hover:${t.accent} transition-colors`}
+                >
+                  <span className="sm:hidden">Resume</span>
+                  <span className="hidden sm:inline">[ Download Resume.pdf ]</span>
+                  <Download size={13} />
+                </a>
+              </div>
             </div>
           </Reveal>
 
