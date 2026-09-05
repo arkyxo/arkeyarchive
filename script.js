@@ -672,7 +672,7 @@ function GithubActivity({ t, isDark }) {
             <span className="h-3 w-3 rounded-full bg-red-500" />
             <span className="h-3 w-3 rounded-full bg-amber-400" />
             <span className="h-3 w-3 rounded-full bg-emerald-500" />
-            <p className={`ml-3 font-mono text-[11px] ${term.prompt} truncate`}>
+            <p className={`ml-3 font-mono text-[11px] ${term.prompt} truncate min-w-0 flex-1`}>
               arkey@ursystem:~$ ./github-activity.sh
             </p>
             <a
@@ -1199,7 +1199,7 @@ function App() {
                     className={
                       certs.length === 1
                         ? "grid grid-cols-1 max-w-[140px] gap-3 mt-4"
-                        : "grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"
+                        : "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"
                     }
                   >
                     {certs.map((cert, i) => {
