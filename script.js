@@ -773,16 +773,9 @@ function App() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showTop, setShowTop] = useState(false);
-  const [openCertCategories, setOpenCertCategories] = useState([]);
   const [booting, setBooting] = useState(true);
   const [bootScreenMounted, setBootScreenMounted] = useState(true);
   const [bootBar, setBootBar] = useState(0);
-
-  const toggleCertCategory = useCallback((category) => {
-    setOpenCertCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
-  }, []);
 
   const t = isDark ? theme.dark : theme.light;
   const progress = useScrollProgress();
@@ -987,7 +980,7 @@ function App() {
           </Reveal>
 
           <Reveal delay={270}>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center justify-center gap-5 sm:justify-start">
               <a
                 href={PROFILE.github}
                 target="_blank"
@@ -1219,78 +1212,60 @@ function App() {
           <SectionHeading
             eyebrow="04 · CREDENTIALS"
             title="Certifications"
-            caption="Click a badge to verify the credential."
+            caption="Click Verify to confirm the credential."
             icon={CheckCircle2}
             t={t}
           />
-          {Object.entries(
-            CERTIFICATIONS.reduce((groups, cert) => {
-              const key = cert.category || "Other";
-              (groups[key] = groups[key] || []).push(cert);
-              return groups;
-            }, {})
-          ).map(([category, certs], groupIndex) => {
-            const isOpen = openCertCategories.includes(category);
-            return (
-              <div key={category} className={groupIndex > 0 ? "mt-6" : ""}>
-                <button
-                  type="button"
-                  onClick={() => toggleCertCategory(category)}
-                  aria-expanded={isOpen}
-                  className="group/cat flex items-center gap-2 py-2 -mx-1 px-1 rounded-lg transition-colors"
-                >
-                  <ChevronDown
-                    size={14}
-                    className={`${t.accent} transition-transform duration-200 ${isOpen ? "rotate-0" : "-rotate-90"}`}
+          <div className="grid sm:grid-cols-2 gap-5">
+            {CERTIFICATIONS.map((cert, i) => (
+              <Reveal key={cert.name} delay={i * 80}>
+                <div className={`h-full rounded-xl border ${t.border} ${t.surface} p-5 flex gap-4 card-glow`}>
+                  <img
+                    src={cert.image}
+                    alt={`${cert.name} badge`}
+                    className="h-16 w-16 rounded-lg object-cover ring-1 ring-black/5 shrink-0"
                   />
-                  <span className={`font-mono text-xs tracking-widest ${t.accent} uppercase group-hover/cat:opacity-80 transition-opacity`}>
-                    {category}
-                  </span>
-                  <span className={`font-mono text-xs ${t.textFaint}`}>({certs.length})</span>
-                </button>
-                {isOpen && (
-                  <div
-                    className={
-                      certs.length === 1
-                        ? "grid grid-cols-1 max-w-[140px] gap-3 mt-4"
-                        : "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"
-                    }
-                  >
-                    {certs.map((cert, i) => {
-                      const tilt = i % 2 === 0 ? "-rotate-2" : "rotate-2";
-                      return (
-                        <Reveal key={cert.name} delay={(i % 3) * 60}>
-                          <div
-                            className={`group relative ${tilt} hover:rotate-0 hover:-translate-y-1 transition-all duration-300 rounded-lg bg-white shadow hover:shadow-lg p-2.5 flex flex-col items-center text-center`}
-                          >
-                            <a href={cert.certificateUrl} target="_blank" rel="noreferrer" className="flex flex-col items-center">
-                              <div className="h-7 w-7 rounded-md bg-slate-50 border border-slate-100 shadow-sm flex items-center justify-center mb-1.5">
-                                <Network size={13} className="text-red-600" />
-                              </div>
-                              <h3 className="font-display font-semibold text-slate-900 text-[10px] leading-snug mb-0.5 max-w-[100px]">
-                                {cert.name}
-                              </h3>
-                            </a>
-                            <p className="font-mono text-[7px] tracking-wider text-slate-400 uppercase mb-1.5">{cert.org}</p>
-                            <a
-                              href={cert.verifyUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="mt-auto inline-flex items-center gap-0.5 font-mono text-[8px] tracking-widest text-slate-400 group-hover:text-red-600 transition-colors"
-                            >
-                              <span className="text-slate-300 group-hover:text-red-500 transition-colors">‹</span>
-                              {(cert.verifyLabel || "Verify").toUpperCase()}
-                              <span className="text-slate-300 group-hover:text-red-500 transition-colors">›</span>
-                            </a>
-                          </div>
-                        </Reveal>
-                      );
-                    })}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className={`font-mono text-[10px] tracking-widest uppercase ${t.accent}`}>{cert.category}</p>
+                      <span className={`shrink-0 font-mono text-[10px] px-2 py-0.5 rounded-full border ${t.border} ${t.textFaint}`}>
+                        {cert.status}
+                      </span>
+                    </div>
+                    <h3 className={`font-display font-semibold ${t.text} mt-1`}>{cert.name}</h3>
+                    <p className={`font-mono text-xs ${t.textFaint} mt-0.5`}>
+                      {cert.org} · {cert.date}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mt-3">
+                      {cert.skills.slice(0, 3).map((skill) => (
+                        <span
+                          key={skill}
+                          className={`font-mono text-[10px] px-2 py-1 rounded-md border ${t.border} ${
+                            isDark ? "bg-slate-950/40" : "bg-slate-50"
+                          } ${t.textMuted}`}
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {cert.skills.length > 3 && (
+                        <span className={`font-mono text-[10px] px-1 py-1 ${t.textFaint}`}>
+                          +{cert.skills.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                    <a
+                      href={cert.verifyUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`inline-flex items-center gap-1.5 mt-4 font-mono text-xs ${t.accent} hover:opacity-80 transition-opacity`}
+                    >
+                      {cert.verifyLabel || "Verify"} <ExternalLink size={12} />
+                    </a>
                   </div>
-                )}
-              </div>
-            );
-          })}
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
