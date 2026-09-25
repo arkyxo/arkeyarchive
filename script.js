@@ -1360,7 +1360,6 @@ function App() {
                   <div className={`relative z-10 sm:row-start-1 ${flip ? "sm:col-start-1 sm:col-end-8" : "sm:col-start-6 sm:col-end-13 sm:text-right"}`}>
                     <p className={`font-mono text-xs tracking-wide ${t.accent}`}>{item.eyebrow}</p>
                     <h3 className={`font-display font-bold text-2xl sm:text-[28px] mt-1 ${t.text}`}>{item.title}</h3>
-                    {item.meta && <p className={`font-mono text-[11px] ${t.textFaint} mt-1`}>{item.meta}</p>}
                     <div className={`mt-5 rounded-lg border ${t.border} p-5 shadow-xl font-body text-sm leading-relaxed ${t.textMuted} ${isDark ? "bg-slate-800/95" : "bg-white"} text-left`}>
                       {renderDescription(item.description, t)}
                     </div>
@@ -1402,63 +1401,79 @@ function App() {
             icon={CheckCircle2}
             t={t}
           />
-          <div className="grid sm:grid-cols-2 gap-5">
-            {CERTIFICATIONS.map((cert, i) => (
-              <Reveal key={cert.name} delay={i * 80}>
-                <div className={`h-full rounded-xl border ${t.border} ${t.surface} p-5 flex gap-4 card-glow`}>
-                  {cert.image ? (
-                    <img
-                      src={cert.image}
-                      alt={`${cert.name} badge`}
-                      className="h-16 w-16 rounded-lg object-cover ring-1 ring-black/5 shrink-0"
-                    />
-                  ) : (
-                    <div className={`h-16 w-16 rounded-lg border ${t.border} flex items-center justify-center shrink-0 ${t.textFaint}`}>
-                      <FileText size={22} />
-                    </div>
-                  )}
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className={`font-mono text-[10px] tracking-widest uppercase ${t.accent}`}>{[cert.group, cert.category].filter(Boolean).join(" · ")}</p>
-                      <span className={`shrink-0 font-mono text-[10px] px-2 py-0.5 rounded-full border ${t.border} ${t.textFaint}`}>
+          <div className="grid sm:grid-cols-2 gap-6">
+            {CERTIFICATIONS.map((cert, i) => {
+              const earned = cert.status !== "In Progress" && cert.status !== "Planned";
+              const stubTint = earned ? "bg-red-400/10" : "bg-amber-400/10";
+              const stubText = earned ? "text-red-400" : "text-amber-400";
+              const StatusIcon = earned ? CheckCircle2 : Clock;
+              return (
+                <Reveal key={cert.name} delay={i * 80}>
+                  <div className={`h-full rounded-2xl border ${t.border} ${t.surface} overflow-hidden flex card-glow`}>
+                    {/* Ticket stub */}
+                    <div className={`relative w-16 sm:w-20 shrink-0 flex flex-col items-center justify-center gap-3 py-6 ${stubTint}`}>
+                      {cert.image ? (
+                        <img src={cert.image} alt={`${cert.name} badge`} className="h-9 w-9 rounded-full object-cover ring-2 ring-white/70" />
+                      ) : (
+                        <div className={`h-9 w-9 rounded-full flex items-center justify-center border-2 ${stubText} ${isDark ? "border-current bg-slate-950/40" : "border-current bg-white/70"}`}>
+                          <StatusIcon size={16} />
+                        </div>
+                      )}
+                      <span className={`font-mono text-[9px] tracking-[0.25em] uppercase [writing-mode:vertical-lr] rotate-180 ${stubText} opacity-80`}>
                         {cert.status}
                       </span>
                     </div>
-                    <h3 className={`font-display font-semibold ${t.text} mt-1`}>{cert.name}</h3>
-                    <p className={`font-mono text-xs ${t.textFaint} mt-0.5`}>
-                      {cert.org} · {cert.date}
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mt-3">
-                      {cert.skills.slice(0, 3).map((skill) => (
-                        <span
-                          key={skill}
-                          className={`font-mono text-[10px] px-2 py-1 rounded-md border ${t.border} ${
-                            isDark ? "bg-slate-950/40" : "bg-slate-50"
-                          } ${t.textMuted}`}
+
+                    {/* Perforated divider */}
+                    <div className="relative w-px shrink-0">
+                      <div className={`absolute inset-y-0 left-0 border-l-2 border-dashed ${t.border}`} />
+                      <span className={`absolute -top-2.5 -left-2.5 h-5 w-5 rounded-full ${t.bg}`} />
+                      <span className={`absolute -bottom-2.5 -left-2.5 h-5 w-5 rounded-full ${t.bg}`} />
+                    </div>
+
+                    <div className="min-w-0 flex-1 p-5 sm:p-6">
+                      <div className="flex items-start justify-between gap-3">
+                        <p className={`font-mono text-[10px] tracking-widest uppercase ${t.accent}`}>
+                          {[cert.group, cert.category].filter(Boolean).join(" · ")}
+                        </p>
+                        <span className={`shrink-0 font-mono text-[10px] ${t.textFaint}`}>No. {String(i + 1).padStart(2, "0")}</span>
+                      </div>
+                      <h3 className={`font-display font-semibold text-lg ${t.text} mt-1 leading-snug`}>{cert.name}</h3>
+                      <p className={`font-mono text-xs ${t.textFaint} mt-1`}>
+                        {cert.org} · {cert.date}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mt-3">
+                        {cert.skills.slice(0, 3).map((skill) => (
+                          <span
+                            key={skill}
+                            className={`font-mono text-[10px] px-2 py-1 rounded-md border ${t.border} ${
+                              isDark ? "bg-slate-950/40" : "bg-slate-50"
+                            } ${t.textMuted}`}
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                        {cert.skills.length > 3 && (
+                          <span className={`font-mono text-[10px] px-1 py-1 ${t.textFaint}`}>
+                            +{cert.skills.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                      {hasLink(cert.verifyUrl) && (
+                        <a
+                          href={cert.verifyUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`inline-flex items-center gap-1.5 mt-4 font-mono text-xs ${t.accent} hover:opacity-80 transition-opacity`}
                         >
-                          {skill}
-                        </span>
-                      ))}
-                      {cert.skills.length > 3 && (
-                        <span className={`font-mono text-[10px] px-1 py-1 ${t.textFaint}`}>
-                          +{cert.skills.length - 3} more
-                        </span>
+                          {cert.verifyLabel || "Verify"} <ExternalLink size={12} />
+                        </a>
                       )}
                     </div>
-                    {hasLink(cert.verifyUrl) && (
-                    <a
-                      href={cert.verifyUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`inline-flex items-center gap-1.5 mt-4 font-mono text-xs ${t.accent} hover:opacity-80 transition-opacity`}
-                    >
-                      {cert.verifyLabel || "Verify"} <ExternalLink size={12} />
-                    </a>
-                    )}
                   </div>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
