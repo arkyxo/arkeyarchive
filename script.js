@@ -311,6 +311,12 @@ const LOGO_SKILLS = SKILLS.flatMap((g) => g.items).filter((item) => item.icon);
 const ALL_PROJECTS = [...WEB_APPS, ...LABS]
   .filter((p, i, arr) => arr.findIndex((q) => q.title === p.title) === i)
   .sort((a, b) => (+yearOf(b) || 0) - (+yearOf(a) || 0));
+const trackOf = (title) => {
+  const inSoftware = WEB_APPS.some((p) => p.title === title);
+  const inNetwork = LABS.some((p) => p.title === title);
+  if (inSoftware && inNetwork) return "Both";
+  return inSoftware ? "Software" : "Networking & IT";
+};
 
 const CERTIFICATIONS = [
   {
@@ -871,15 +877,21 @@ function ProjectArchive({ t, onClose }) {
             <tr className={`font-mono text-xs uppercase tracking-wider ${t.textFaint} border-b ${t.border}`}>
               <th className="py-3 pr-4 font-medium">Year</th>
               <th className="py-3 pr-4 font-medium">Project</th>
+              <th className="py-3 pr-4 font-medium">Track</th>
               <th className="py-3 pr-4 font-medium hidden sm:table-cell">Stack</th>
               <th className="py-3 font-medium">Links</th>
             </tr>
           </thead>
           <tbody>
-            {ALL_PROJECTS.map((p) => (
+            {ALL_PROJECTS.map((p) => {
+              const track = trackOf(p.title);
+              const trackColor =
+                track === "Both" ? "text-amber-500" : track === "Software" ? "text-red-400" : "text-blue-400";
+              return (
               <tr key={p.title} className={`border-b ${t.border} hover:bg-red-400/5 transition-colors align-top`}>
                 <td className={`py-4 pr-4 font-mono text-sm ${t.accent}`}>{yearOf(p)}</td>
                 <td className="py-4 pr-4 font-display font-semibold">{p.title}</td>
+                <td className={`py-4 pr-4 font-mono text-[11px] whitespace-nowrap ${trackColor}`}>{track}</td>
                 <td className={`py-4 pr-4 font-mono text-xs leading-relaxed ${t.textFaint} hidden sm:table-cell`}>{p.tags.join(" · ")}</td>
                 <td className="py-4">
                   <div className={`flex items-center gap-3 ${t.textMuted}`}>
@@ -892,7 +904,8 @@ function ProjectArchive({ t, onClose }) {
                   </div>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
