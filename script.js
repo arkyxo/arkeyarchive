@@ -1120,43 +1120,7 @@ function App() {
           </Reveal>
 
           <Reveal delay={220}>
-            <div
-              className={`max-w-xl mt-10 mb-6 rounded-xl overflow-hidden border ${t.border} backdrop-blur ${
-                isDark ? "bg-slate-900/70" : "bg-white/80"
-              } font-mono text-sm`}
-            >
-              <div className={`flex items-center gap-2 px-4 py-2.5 border-b ${t.border} ${t.textFaint} text-[11px]`}>
-                <span className="h-2 w-2 rounded-full bg-red-400" />
-                <span className="h-2 w-2 rounded-full bg-amber-400" />
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span className="ml-2 truncate">arkey@portfolio:~$ ls projects/</span>
-              </div>
-              {[
-                { tab: "webapps", name: "software/", note: "Apps, a client POS, a Roblox game" },
-                { tab: "labs", name: "networking-it/", note: "Network monitor, VLAN labs, IT support" },
-              ].map((d, i) => (
-                <button
-                  key={d.tab}
-                  onClick={() => openGroup(d.tab)}
-                  className={`group w-full flex items-center justify-between gap-4 px-4 py-4 text-left hover:bg-red-400/10 transition-colors ${
-                    i > 0 ? `border-t ${t.border}` : ""
-                  }`}
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-red-400">&gt;</span>
-                      <span className={`font-semibold ${t.text}`}>{d.name}</span>
-                    </div>
-                    <p className={`text-xs mt-1 ml-4 truncate ${t.textFaint}`}>{d.note}</p>
-                  </div>
-                  <ArrowRight size={14} className={`shrink-0 ${t.textFaint} group-hover:text-red-400 group-hover:translate-x-1 transition-all`} />
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={270}>
-            <div className={`flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-xs ${t.textMuted}`}>
+            <div className={`flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-xs mt-10 ${t.textMuted}`}>
               <button onClick={() => scrollToId("certifications")} className="inline-flex items-center gap-1.5 hover:text-red-400 transition-colors">
                 <CheckCircle2 size={14} /> Certificates
               </button>
