@@ -33,6 +33,7 @@ const Github = makeIcon(<path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4
 const GithubIcon = Github;
 const Linkedin = makeIcon(<><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect width="4" height="12" x="2" y="9" /><circle cx="4" cy="4" r="2" /></>);
 const Download = makeIcon(<><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></>);
+const Eye = makeIcon(<><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></>);
 const Sun = makeIcon(<><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></>);
 const Moon = makeIcon(<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />);
 const ArrowUp = makeIcon(<><path d="m5 12 7-7 7 7" /><path d="M12 19V5" /></>);
@@ -960,13 +961,23 @@ function ResumeArchive({ t, onClose, isDark }) {
                   </span>
                 ))}
               </div>
-              <a
-                href={r.url}
-                download={r.filename}
-                className={`mt-6 inline-flex items-center justify-center gap-2 rounded-lg border border-red-400 px-4 py-2.5 font-mono text-xs ${t.accent} hover:bg-red-400/10 transition-colors`}
-              >
-                Download PDF <Download size={14} />
-              </a>
+              <div className="flex gap-2.5 mt-6">
+                <a
+                  href={r.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-lg border ${t.border} px-4 py-2.5 font-mono text-xs ${t.textMuted} hover:${t.accent} hover:border-red-400/50 transition-colors`}
+                >
+                  View <Eye size={14} />
+                </a>
+                <a
+                  href={r.url}
+                  download={r.filename}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-red-400 px-4 py-2.5 font-mono text-xs ${t.accent} hover:bg-red-400/10 transition-colors`}
+                >
+                  Download <Download size={14} />
+                </a>
+              </div>
             </div>
           ))}
         </div>
