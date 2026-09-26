@@ -1132,20 +1132,24 @@ function App() {
                 <span className="ml-2 truncate">arkey@portfolio:~$ ls projects/</span>
               </div>
               {[
-                { tab: "webapps", name: "software/", note: "apps · client POS · Roblox game" },
-                { tab: "labs", name: "networking-it/", note: "monitor · VLAN labs · IT support" },
+                { tab: "webapps", name: "software/", note: "Apps, a client POS, a Roblox game" },
+                { tab: "labs", name: "networking-it/", note: "Network monitor, VLAN labs, IT support" },
               ].map((d, i) => (
                 <button
                   key={d.tab}
                   onClick={() => openGroup(d.tab)}
-                  className={`group w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-red-400/10 transition-colors ${
+                  className={`group w-full flex items-center justify-between gap-4 px-4 py-4 text-left hover:bg-red-400/10 transition-colors ${
                     i > 0 ? `border-t ${t.border}` : ""
                   }`}
                 >
-                  <span className="text-red-400">&gt;</span>
-                  <span className={`font-semibold ${t.text}`}>{d.name}</span>
-                  <span className={`hidden sm:inline text-xs truncate ${t.textFaint}`}>{d.note}</span>
-                  <ArrowRight size={14} className={`ml-auto shrink-0 ${t.textFaint} group-hover:text-red-400 group-hover:translate-x-1 transition-all`} />
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-400">&gt;</span>
+                      <span className={`font-semibold ${t.text}`}>{d.name}</span>
+                    </div>
+                    <p className={`text-xs mt-1 ml-4 truncate ${t.textFaint}`}>{d.note}</p>
+                  </div>
+                  <ArrowRight size={14} className={`shrink-0 ${t.textFaint} group-hover:text-red-400 group-hover:translate-x-1 transition-all`} />
                 </button>
               ))}
             </div>
@@ -1221,20 +1225,9 @@ function App() {
                 <Wrench size={13} /> 02 · TOOLKIT
               </p>
               <h2 className={`font-display text-2xl sm:text-3xl font-bold ${t.text} mb-4`}>Technical Skills</h2>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5">
-                {SKILL_LEGEND.map((lvl) => {
-                  const meta = SKILL_LEVELS[lvl];
-                  return (
-                    <span key={lvl} className="inline-flex items-center gap-1.5">
-                      <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
-                      <span className={`font-mono text-[11px] ${t.textMuted}`}>{meta.label}</span>
-                    </span>
-                  );
-                })}
-              </div>
+              <p className={`font-mono text-xs ${t.textFaint}`}>
+                What I use to build software and keep networks running.
+              </p>
             </Reveal>
           </div>
 
