@@ -43,8 +43,6 @@ section[id] { scroll-margin-top: 88px; }
 
 .marquee-mask {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, black 48px, black calc(100% - 48px), transparent 100%);
 }
 
 .marquee-track {
@@ -88,9 +86,8 @@ section[id] { scroll-margin-top: 88px; }
       rgba(248, 113, 113, 0.16) 1px,
       transparent 1px,
       transparent 24px
-    ),
-    radial-gradient(ellipse 60% 100% at 50% 50%, rgba(248, 113, 113, 0.07), transparent 75%);
-  background-size: 24px 100%, 100% 100%;
+    );
+  background-size: 24px 100%;
   box-shadow:
     inset 0 1px 0 rgba(248, 113, 113, 0.22),
     inset 0 -1px 0 rgba(248, 113, 113, 0.22);
@@ -102,8 +99,8 @@ section[id] { scroll-margin-top: 88px; }
 }
 
 @keyframes ticker-rail-scroll {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: -24px 0, 0 0; }
+  from { background-position: 0 0; }
+  to { background-position: -24px 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -158,8 +155,6 @@ html::-webkit-scrollbar {
 /* ── Vertical marquee (scrolling tech-stack icon columns) ── */
 .marquee-mask-y {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
 }
 
 .marquee-track-y {

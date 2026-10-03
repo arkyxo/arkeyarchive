@@ -786,7 +786,7 @@ function GithubActivity({ t, isDark }) {
             {/* Header */}
             <div className="flex items-center justify-between gap-4">
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-red-400 to-red-500 text-white shadow-lg shadow-red-400/30">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-400 text-slate-950">
                   <Github size={22} />
                 </span>
                 <div className="min-w-0">
@@ -986,7 +986,7 @@ function EducationCard({ edu, t, isDark }) {
             const fill = Math.max(0, Math.min(1, elapsed - i)) * 100;
             return (
               <div key={i} className={`h-1.5 flex-1 rounded-full overflow-hidden ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
-                <div className="h-full rounded-full bg-gradient-to-r from-red-400 to-red-500" style={{ width: `${fill}%` }} />
+                <div className="h-full rounded-full bg-red-400" style={{ width: `${fill}%` }} />
               </div>
             );
           })}
@@ -1053,8 +1053,7 @@ function SkillsArchive({ t, onClose, isDark }) {
         <button onClick={onClose} className={`inline-flex items-center gap-2 font-mono text-xs ${t.textMuted} hover:text-red-400 transition-colors`}>
           <ArrowRight size={14} className="rotate-180" /> Back to portfolio
         </button>
-        <p className={`font-mono text-xs tracking-widest ${t.accent} mt-12`}>$ ls ~/toolkit</p>
-        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-3">Tech Stack</h1>
+        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-12">Tech Stack</h1>
         <p className={`font-mono text-sm ${t.accent} mt-3`}>Everything I build, configure, and debug with.</p>
 
         <div className="mt-12 space-y-12">
@@ -1090,8 +1089,7 @@ function ProjectArchive({ t, onClose }) {
         <button onClick={onClose} className={`inline-flex items-center gap-2 font-mono text-xs ${t.textMuted} hover:text-red-400 transition-colors`}>
           <ArrowRight size={14} className="rotate-180" /> Back to portfolio
         </button>
-        <p className={`font-mono text-xs tracking-widest ${t.accent} mt-12`}>$ cat projects.log</p>
-        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-3">Project Log</h1>
+        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-12">Project Log</h1>
         <p className={`font-mono text-sm ${t.accent} mt-3`}>Everything I've built, wired up, and shipped.</p>
 
         <table className="w-full text-left mt-12">
@@ -1174,8 +1172,7 @@ function ResumeArchive({ t, onClose, isDark }) {
         <button onClick={onClose} className={`inline-flex items-center gap-2 font-mono text-xs ${t.textMuted} hover:text-red-400 transition-colors`}>
           <ArrowRight size={14} className="rotate-180" /> Back to portfolio
         </button>
-        <p className={`font-mono text-xs tracking-widest ${t.accent} mt-12`}>$ cat resumes.log</p>
-        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-3">Resumes</h1>
+        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-12">Resumes</h1>
         <p className={`font-mono text-sm ${t.accent} mt-3`}>Two versions, tailored to what I'm applying for.</p>
 
         <div className="grid sm:grid-cols-2 gap-6 mt-12">
@@ -1393,7 +1390,7 @@ function App() {
               </div>
               <div className={`h-1 w-full overflow-hidden rounded-full ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-300"
+                  className="h-full rounded-full bg-red-400"
                   style={{ width: `${bootPct}%` }}
                 />
               </div>
@@ -1466,43 +1463,58 @@ function App() {
       {/* HERO */}
       <section id="hero" className="relative pt-16 flex items-center overflow-hidden" style={{ minHeight: "92vh" }}>
         <NetworkCanvas isDark={isDark} />
-        <div className={`absolute inset-0 bg-gradient-to-b ${isDark ? "from-slate-950/40 via-slate-950/70 to-slate-950" : "from-slate-50/40 via-slate-50/80 to-slate-50"}`} />
+        <div className={`absolute inset-0 ${isDark ? "bg-slate-950/70" : "bg-slate-50/80"}`} />
 
         <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 w-full">
-          <Reveal delay={60}>
-            <div className="flex items-center gap-2 mb-5">
-              <span className={`h-1.5 w-1.5 rounded-full ${t.accentBg} animate-blink`} />
-              <span className={`font-mono text-xs tracking-widest uppercase ${t.accent}`}>{PROFILE.subrole}</span>
-            </div>
-          </Reveal>
-
           <Reveal delay={110}>
-            <h1 className={`font-display font-bold text-4xl sm:text-6xl lg:text-7xl leading-[1.05] mb-6 max-w-4xl ${t.text}`}>
+            <h1 className={`font-display font-bold tracking-tight text-[clamp(1.5rem,7vw,4.5rem)] leading-[1.05] mb-6 whitespace-nowrap ${t.text}`}>
               <span className={t.accent}>Websites</span> on One Side.
               <br />
               <span className={t.accent}>Networks</span> on the Other.<span className="animate-blink text-red-400">_</span>
             </h1>
           </Reveal>
 
+          <Reveal delay={170}>
+            <p className={`font-body text-base sm:text-lg ${t.textMuted} max-w-xl leading-relaxed`}>
+              I build software and understand the network it runs on.
+            </p>
+          </Reveal>
+
           <Reveal delay={220}>
-            <div className={`flex flex-wrap items-center gap-x-5 gap-y-3 font-mono text-xs mt-10 ${t.textMuted}`}>
-              <button onClick={() => scrollToId("certifications")} className="inline-flex items-center gap-1.5 hover:text-red-400 transition-colors">
-                <CheckCircle2 size={14} /> Certificates
+            <div className="mt-9 flex flex-nowrap items-center gap-2 sm:gap-3">
+              <button
+                onClick={openResumes}
+                className="inline-flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-red-400 px-4 sm:px-6 font-body text-xs sm:text-sm font-semibold text-slate-950 shadow-lg shadow-red-400/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-300"
+              >
+                <Download size={15} /> Resume
               </button>
-              <button onClick={openResumes} className="inline-flex items-center gap-1.5 hover:text-red-400 transition-colors">
-                <Download size={14} /> Resume
-              </button>
-              <span className={`hidden sm:block h-4 w-px ${isDark ? "bg-slate-700" : "bg-slate-300"}`} />
-              <a href={PROFILE.github} target="_blank" rel="noreferrer" aria-label="GitHub" className="hover:text-red-400 transition-colors"><Github size={17} /></a>
-              <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="hover:text-red-400 transition-colors"><Linkedin size={17} /></a>
-              <a href={mailtoUrl} aria-label="Email" className="hover:text-red-400 transition-colors"><Mail size={17} /></a>
+              {[
+                { href: PROFILE.github, label: "GitHub", Icon: Github, ext: true },
+                { href: PROFILE.linkedin, label: "LinkedIn", Icon: Linkedin, ext: true },
+                { href: mailtoUrl, label: "Email", Icon: Mail, ext: false },
+              ].map(({ href, label, Icon, ext }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  {...(ext ? { target: "_blank", rel: "noreferrer" } : {})}
+                  className={`flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-2xl border ${t.border} ${t.surface} ${t.textMuted} backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-red-400/60 hover:text-red-400 hover:shadow-lg hover:shadow-red-400/20`}
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
             </div>
           </Reveal>
         </div>
 
-        <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 ${t.textFaint} animate-floaty`}>
-          <ChevronDown size={20} />
-        </div>
+        {/* scroll cue */}
+        <button
+          aria-label="Scroll to about"
+          onClick={() => scrollToId("about")}
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex h-10 w-6 items-start justify-center rounded-full border ${isDark ? "border-slate-600" : "border-slate-300"} pt-2 ${t.textFaint}`}
+        >
+          <span className="h-2 w-1 rounded-full bg-red-400 animate-floaty" />
+        </button>
       </section>
 
       {/* ABOUT */}
@@ -1533,7 +1545,7 @@ function App() {
                 </span>
                 <span className="font-body text-[11px] sm:text-sm font-medium leading-tight sm:whitespace-nowrap">{PROFILE.location}</span>
               </div>
-              <div className="inline-flex min-w-0 items-center gap-1.5 sm:gap-2.5 rounded-2xl sm:rounded-full border border-red-400/30 bg-gradient-to-r from-red-400/15 to-red-400/5 py-1.5 pl-2.5 sm:pl-3.5 pr-2.5 sm:pr-4 shadow-sm shadow-red-400/10 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/50">
+              <div className="inline-flex min-w-0 items-center gap-1.5 sm:gap-2.5 rounded-2xl sm:rounded-full border border-red-400/30 bg-red-400/10 py-1.5 pl-2.5 sm:pl-3.5 pr-2.5 sm:pr-4 shadow-sm shadow-red-400/10 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/50">
                 <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 shrink-0">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
                   <span className="relative h-full w-full rounded-full bg-red-400" />
@@ -1695,7 +1707,7 @@ function App() {
                           </span>
                         </>
                       ) : (
-                        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-red-400/15 to-transparent ${t.accent}`}>
+                        <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 bg-red-400/10 ${t.accent}`}>
                           <div className="absolute inset-0 bg-grid opacity-[0.06]" />
                           <GroupIcon size={40} />
                           <span className="relative font-mono text-xs tracking-widest uppercase">{item.eyebrow}</span>
@@ -1842,7 +1854,7 @@ function App() {
 
         <div className="relative max-w-3xl mx-auto">
           {/* Gradient rail */}
-          <div className="absolute top-2 bottom-2 left-[11px] w-px bg-gradient-to-b from-red-400/70 via-red-400/20 to-transparent" />
+          <div className="absolute top-2 bottom-2 left-[11px] w-px bg-red-400/30" />
 
           <div className="space-y-6">
             {EXPERIENCE.map((exp, i) => {
