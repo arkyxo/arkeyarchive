@@ -855,6 +855,88 @@ function GithubActivity({ t, isDark }) {
 /* ============================================================
    Main App
    ============================================================ */
+/* ============================================================
+   Skills page (opened from "View more" in Technical Skills)
+   ============================================================ */
+const ALL_SKILL_ITEMS = SKILLS.flatMap((g) => g.items);
+const pickSkills = (names) => names.map((n) => ALL_SKILL_ITEMS.find((i) => i.name === n)).filter(Boolean);
+
+// Edit this list to match the AI tools you actually use.
+// Logos load from the Simple Icons CDN; if one fails, a monogram tile is shown instead.
+const AI_TOOLING = [
+  { name: "Claude", abbr: "CL", icon: "https://cdn.simpleicons.org/claude" },
+  { name: "ChatGPT", abbr: "GPT", icon: "https://cdn.simpleicons.org/openai" },
+  { name: "Gemini", abbr: "GEM", icon: "https://cdn.simpleicons.org/googlegemini" },
+];
+
+const SKILL_GROUPS = [
+  { title: "Languages", items: pickSkills(["JavaScript", "HTML", "CSS", "Python", "Lua (Roblox)", "SQL", "R"]) },
+  { title: "Frameworks & Libraries", items: pickSkills(["React", "Tailwind CSS"]) },
+  { title: "Databases", items: pickSkills(["Firebase / Firestore", "MySQL", "PostgreSQL"]) },
+  { title: "Platforms & Tooling", items: pickSkills(["Git", "GitHub", "Docker", "REST API Integration"]) },
+  { title: "Networking & IT", items: (SKILLS.find((g) => g.category === "Networking & IT") || { items: [] }).items },
+  { title: "AI Tooling", items: AI_TOOLING },
+];
+const SKILL_TOTAL = SKILL_GROUPS.reduce((n, g) => n + g.items.length, 0);
+
+function SkillTile({ item, t, isDark }) {
+  const [broken, setBroken] = useState(false);
+  const showImg = item.icon && !broken;
+  return (
+    <div className="flex flex-col items-center text-center gap-2.5" title={item.name}>
+      <div className="relative">
+        <div className={`h-14 w-14 rounded-2xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50"} flex items-center justify-center p-1.5 card-glow`}>
+          {showImg ? (
+            <div className="h-full w-full rounded-lg bg-white flex items-center justify-center p-1 shadow-sm">
+              <img src={item.icon} alt={item.name} onError={() => setBroken(true)} className="h-full w-full object-contain" />
+            </div>
+          ) : (
+            <span className={`font-mono text-[11px] font-bold tracking-wider ${t.accent}`}>{item.abbr}</span>
+          )}
+        </div>
+      </div>
+      <span className={`font-body text-xs sm:text-[13px] leading-snug ${t.textMuted}`}>{item.name}</span>
+    </div>
+  );
+}
+
+function SkillsArchive({ t, onClose, isDark }) {
+  useEffect(() => {
+    const onKey = (e) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div className={`fixed inset-0 z-[60] overflow-y-auto ${t.bg} ${t.text}`}>
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <button onClick={onClose} className={`inline-flex items-center gap-2 font-mono text-xs ${t.textMuted} hover:text-red-400 transition-colors`}>
+          <ArrowRight size={14} className="rotate-180" /> Back to portfolio
+        </button>
+        <p className={`font-mono text-xs tracking-widest ${t.accent} mt-12`}>$ ls ~/toolkit</p>
+        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-3">Tech Stack</h1>
+        <p className={`font-mono text-sm ${t.accent} mt-3`}>Everything I build, configure, and debug with.</p>
+
+        <div className="mt-12 space-y-12">
+          {SKILL_GROUPS.map((group) => (
+            <section key={group.title}>
+              <div className="flex items-center gap-4 mb-7">
+                <h2 className={`font-mono text-xs tracking-[0.25em] uppercase ${t.textFaint}`}>{group.title}</h2>
+                <span className={`h-px flex-1 border-t ${t.border}`} />
+              </div>
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-x-4 gap-y-8">
+                {group.items.map((item) => (
+                  <SkillTile key={item.name} item={item} t={t} isDark={isDark} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProjectArchive({ t, onClose }) {
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -1086,6 +1168,19 @@ function App() {
     setArchiveOpen(false);
   }, []);
 
+  const [skillsOpen, setSkillsOpen] = useState(false);
+  useEffect(() => {
+    const sync = () => setSkillsOpen(window.location.hash === "#all-skills");
+    sync();
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
+  const openSkills = () => { window.location.hash = "all-skills"; };
+  const closeSkills = useCallback(() => {
+    window.history.replaceState(null, "", window.location.pathname + window.location.search + "#skills");
+    setSkillsOpen(false);
+  }, []);
+
   const [resumesOpen, setResumesOpen] = useState(false);
   useEffect(() => {
     const sync = () => setResumesOpen(window.location.hash === "#resumes");
@@ -1094,8 +1189,8 @@ function App() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
   useEffect(() => {
-    document.body.style.overflow = resumesOpen || archiveOpen ? "hidden" : "";
-  }, [resumesOpen, archiveOpen]);
+    document.body.style.overflow = resumesOpen || archiveOpen || skillsOpen ? "hidden" : "";
+  }, [resumesOpen, archiveOpen, skillsOpen]);
   const openResumes = () => { window.location.hash = "resumes"; };
   const closeResumes = useCallback(() => {
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
@@ -1318,6 +1413,15 @@ function App() {
               </div>
             </div>
           </Reveal>
+
+          <div className="mt-12 text-center">
+            <button
+              onClick={openSkills}
+              className={`inline-flex items-center gap-2 rounded-lg border border-red-400 px-6 py-3 font-mono text-sm ${t.accent} hover:bg-red-400/10 transition-colors`}
+            >
+              View more skills ({SKILL_TOTAL}) <ArrowRight size={15} />
+            </button>
+          </div>
         </div>
       </section>
 
@@ -1565,6 +1669,7 @@ function App() {
       </footer>
 
       {archiveOpen && <ProjectArchive t={t} onClose={closeArchive} />}
+      {skillsOpen && <SkillsArchive t={t} onClose={closeSkills} isDark={isDark} />}
       {resumesOpen && <ResumeArchive t={t} onClose={closeResumes} isDark={isDark} />}
 
       {/* Back to top */}
