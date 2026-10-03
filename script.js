@@ -1276,7 +1276,7 @@ function App() {
       return;
     }
     document.body.classList.remove("overflow-hidden");
-    const unmountTimer = setTimeout(() => setBootScreenMounted(false), 500);
+    const unmountTimer = setTimeout(() => setBootScreenMounted(false), 900);
     return () => clearTimeout(unmountTimer);
   }, [booting]);
 
@@ -1361,37 +1361,51 @@ function App() {
       {/* BOOT / LOADING SCREEN */}
       {bootScreenMounted && (
         <div
-          className={`fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden ${t.bg} transition-opacity duration-500 ${
-            booting ? "opacity-100" : "opacity-0 pointer-events-none"
+          className={`fixed inset-0 z-[70] flex flex-col justify-between overflow-hidden ${t.bg} transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
+            booting ? "translate-y-0" : "-translate-y-full pointer-events-none"
           }`}
+          role="status"
+          aria-label="Loading portfolio"
         >
-          {/* ambient glow */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-400/15 blur-3xl" />
-
-          <div className="relative flex flex-col items-center">
-            {/* spinner ring */}
-            <div className="relative flex h-16 w-16 items-center justify-center">
-              <span className="absolute inset-0 rounded-full border-2 border-red-400/20" />
-              <span className="absolute inset-0 rounded-full border-2 border-transparent border-t-red-400 animate-spin" />
-              <span className="h-2.5 w-2.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
-            </div>
-
-            <p className="font-display font-bold text-3xl tracking-tight mt-8">
-              RK
-              <span className="text-red-400">.</span>
+          {/* top bar */}
+          <div className="flex items-center justify-between px-6 sm:px-12 pt-7 sm:pt-10">
+            <p className="font-display font-semibold text-lg tracking-tight flex items-center gap-2">
+              <span className={`h-2 w-2 rounded-full ${t.accentBg} animate-blink`} />
+              {PROFILE.name}<span className="text-red-400">.</span>
             </p>
+          </div>
 
-            <div className="mt-10 w-60">
-              <div className="mb-2 flex items-center justify-between font-mono text-xs">
-                <span className={t.textFaint}>Loading portfolio</span>
-                <span className={`${t.accent} tabular-nums`}>{bootPct}%</span>
-              </div>
-              <div className={`h-1 w-full overflow-hidden rounded-full ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
-                <div
-                  className="h-full rounded-full bg-red-400"
-                  style={{ width: `${bootPct}%` }}
-                />
-              </div>
+          {/* status */}
+          <div className="px-6 sm:px-12">
+            <p className={`font-mono text-xs sm:text-sm ${t.textMuted} flex items-center gap-2`}>
+              <span className="text-red-400">›</span>
+              {bootPct < 30
+                ? "Initializing"
+                : bootPct < 60
+                ? "Loading projects"
+                : bootPct < 95
+                ? "Connecting the network"
+                : "Ready"}
+              <span className="animate-blink text-red-400">_</span>
+            </p>
+            <p className={`font-display text-lg sm:text-2xl font-medium tracking-tight mt-2 ${t.text}`}>
+              PORTFOLIO
+            </p>
+          </div>
+
+          {/* big counter + progress line */}
+          <div>
+            <div className="px-6 sm:px-12 flex items-end justify-between">
+              <p
+                className={`font-display font-bold tabular-nums leading-[0.85] tracking-tighter text-[28vw] sm:text-[14rem] ${t.text}`}
+                aria-hidden="true"
+              >
+                {String(bootPct).padStart(2, "0")}
+                <span className="text-red-400 text-[0.35em] align-top ml-1">%</span>
+              </p>
+            </div>
+            <div className={`mt-6 sm:mt-8 h-[3px] w-full ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
+              <div className="h-full bg-red-400" style={{ width: `${bootPct}%` }} />
             </div>
           </div>
         </div>
