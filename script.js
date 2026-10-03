@@ -1462,34 +1462,25 @@ function App() {
             <p className={`font-body leading-relaxed ${t.textMuted} mt-5 max-w-xl`}>
               I'm looking for an internship where both sides are useful.
             </p>
-            <div
-              className={`mt-7 inline-flex max-w-full flex-col sm:flex-row overflow-hidden rounded-2xl border ${t.border} ${t.surface} divide-y sm:divide-y-0 sm:divide-x ${
-                isDark ? "divide-slate-800" : "divide-slate-200"
-              }`}
-            >
-              <div className="flex items-center gap-3 px-5 py-3.5">
-                <MapPin size={16} className={t.accent} />
-                <div>
-                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Based in</p>
-                  <p className="font-body text-sm font-medium leading-none">{PROFILE.location}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 px-5 py-3.5">
-                <GraduationCap size={16} className={t.accent} />
-                <div>
-                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Studying</p>
-                  <p className="font-body text-sm font-medium leading-none">Computer Engineering</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 px-5 py-3.5 bg-red-400/10">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
-                  <span className="relative h-2.5 w-2.5 rounded-full bg-red-400" />
+            <div className="mt-7 flex flex-nowrap items-stretch gap-2 sm:gap-2.5">
+              <div
+                className={`group inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5 rounded-2xl sm:rounded-full border ${t.border} ${t.surface} py-1.5 pl-2 sm:pl-1.5 pr-2.5 sm:pr-4 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md`}
+              >
+                <span
+                  className={`flex h-6 w-6 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full ${
+                    isDark ? "bg-slate-800" : "bg-slate-100"
+                  } ${t.accent}`}
+                >
+                  <MapPin size={13} />
                 </span>
-                <div>
-                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Status</p>
-                  <p className={`font-body text-sm font-medium leading-none ${t.accent}`}>Looking for an internship</p>
-                </div>
+                <span className="font-body text-[11px] sm:text-sm font-medium leading-tight sm:whitespace-nowrap">{PROFILE.location}</span>
+              </div>
+              <div className="inline-flex min-w-0 items-center gap-1.5 sm:gap-2.5 rounded-2xl sm:rounded-full border border-red-400/30 bg-gradient-to-r from-red-400/15 to-red-400/5 py-1.5 pl-2.5 sm:pl-3.5 pr-2.5 sm:pr-4 shadow-sm shadow-red-400/10 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/50">
+                <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5 shrink-0">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
+                  <span className="relative h-full w-full rounded-full bg-red-400" />
+                </span>
+                <span className={`font-body text-[11px] sm:text-sm font-medium leading-tight sm:whitespace-nowrap ${t.accent}`}>Looking for an internship</span>
               </div>
             </div>
           </Reveal>
