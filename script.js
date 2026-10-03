@@ -1174,6 +1174,7 @@ function App() {
   const [booting, setBooting] = useState(true);
   const [bootScreenMounted, setBootScreenMounted] = useState(true);
   const [bootBar, setBootBar] = useState(0);
+  const [bootPct, setBootPct] = useState(0);
   const [openExp, setOpenExp] = useState(null); // index of the experience card whose details are open
 
   const t = isDark ? theme.dark : theme.light;
@@ -1201,6 +1202,19 @@ function App() {
       cancelAnimationFrame(raf);
       clearTimeout(hideTimer);
     };
+  }, []);
+
+  // Percent counter for the loading screen (ease-out over the same 3s as the boot timer).
+  useEffect(() => {
+    const start = performance.now();
+    let raf;
+    const tick = (now) => {
+      const p = Math.min(1, (now - start) / 3000);
+      setBootPct(Math.round(100 * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   useEffect(() => {
@@ -1294,25 +1308,38 @@ function App() {
       {/* BOOT / LOADING SCREEN */}
       {bootScreenMounted && (
         <div
-          className={`fixed inset-0 z-[70] flex flex-col items-center justify-center gap-6 ${t.bg} transition-opacity duration-500 ${
+          className={`fixed inset-0 z-[70] flex flex-col items-center justify-center overflow-hidden ${t.bg} transition-opacity duration-500 ${
             booting ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
-          <div className="flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${t.accentBg} animate-blink`} />
-            <span className="font-display font-semibold text-xl tracking-tight">
-              {PROFILE.name}
+          {/* ambient glow */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-red-400/15 blur-3xl" />
+
+          <div className="relative flex flex-col items-center">
+            {/* spinner ring */}
+            <div className="relative flex h-16 w-16 items-center justify-center">
+              <span className="absolute inset-0 rounded-full border-2 border-red-400/20" />
+              <span className="absolute inset-0 rounded-full border-2 border-transparent border-t-red-400 animate-spin" />
+              <span className="h-2.5 w-2.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
+            </div>
+
+            <p className="font-display font-bold text-3xl tracking-tight mt-8">
+              RK
               <span className="text-red-400">.</span>
-            </span>
-          </div>
-          <p className={`font-mono text-xs tracking-widest ${t.textFaint}`}>
-            <span className="text-red-400">$</span> booting system<span className="animate-blink">_</span>
-          </p>
-          <div className={`h-[2px] w-40 rounded-full overflow-hidden ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
-            <div
-              className={`h-full ${t.accentBg} transition-all duration-[3000ms] ease-out`}
-              style={{ width: `${bootBar}%` }}
-            />
+            </p>
+
+            <div className="mt-10 w-60">
+              <div className="mb-2 flex items-center justify-between font-mono text-xs">
+                <span className={t.textFaint}>Loading portfolio</span>
+                <span className={`${t.accent} tabular-nums`}>{bootPct}%</span>
+              </div>
+              <div className={`h-1 w-full overflow-hidden rounded-full ${isDark ? "bg-slate-800" : "bg-slate-200"}`}>
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-red-500 to-red-300"
+                  style={{ width: `${bootPct}%` }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -1435,60 +1462,63 @@ function App() {
             <p className={`font-body leading-relaxed ${t.textMuted} mt-5 max-w-xl`}>
               I'm looking for an internship where both sides are useful.
             </p>
-            <div className="flex flex-wrap gap-2.5 mt-7">
-              <span className={`inline-flex items-center gap-2 rounded-full border ${t.border} ${t.surface} px-3.5 py-1.5 font-mono text-xs ${t.textMuted}`}>
-                <MapPin size={13} className={t.accent} /> {PROFILE.location}
-              </span>
-              <span className={`inline-flex items-center gap-2 rounded-full border ${t.border} ${t.surface} px-3.5 py-1.5 font-mono text-xs ${t.textMuted}`}>
-                <GraduationCap size={13} className={t.accent} /> Computer Engineering
-              </span>
-              <span className={`inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 px-3.5 py-1.5 font-mono text-xs ${t.accent}`}>
-                <span className="h-1.5 w-1.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
-                Looking for an internship
-              </span>
+            <div
+              className={`mt-7 inline-flex max-w-full flex-col sm:flex-row overflow-hidden rounded-2xl border ${t.border} ${t.surface} divide-y sm:divide-y-0 sm:divide-x ${
+                isDark ? "divide-slate-800" : "divide-slate-200"
+              }`}
+            >
+              <div className="flex items-center gap-3 px-5 py-3.5">
+                <MapPin size={16} className={t.accent} />
+                <div>
+                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Based in</p>
+                  <p className="font-body text-sm font-medium leading-none">{PROFILE.location}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 px-5 py-3.5">
+                <GraduationCap size={16} className={t.accent} />
+                <div>
+                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Studying</p>
+                  <p className="font-body text-sm font-medium leading-none">Computer Engineering</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 px-5 py-3.5 bg-red-400/10">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
+                  <span className="relative h-2.5 w-2.5 rounded-full bg-red-400" />
+                </span>
+                <div>
+                  <p className={`font-body text-[11px] ${t.textFaint} leading-none mb-1`}>Status</p>
+                  <p className={`font-body text-sm font-medium leading-none ${t.accent}`}>Looking for an internship</p>
+                </div>
+              </div>
             </div>
           </Reveal>
 
-          <div className="lg:col-span-2 grid gap-4">
-            {[
-              {
-                title: "Software",
-                icon: Code2,
-                items: ["Restaurant POS", "Movie-lookup web app", "Published Roblox game"],
-              },
-              {
-                title: "Networking & IT",
-                icon: Network,
-                items: [
-                  "Python home-network monitor",
-                  "VLANs and subnetting in Cisco Packet Tracer",
-                  "Barangay office support through SPES",
-                ],
-              },
-            ].map((side, i) => {
-              const SideIcon = side.icon;
-              return (
-                <Reveal key={side.title} delay={120 + i * 100}>
-                  <div className={`card-glow rounded-2xl border ${t.border} ${t.surface} p-5 sm:p-6 hover:border-red-400/40`}>
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className={`h-10 w-10 rounded-xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50"} ${t.accent} flex items-center justify-center`}>
-                        <SideIcon size={18} />
-                      </div>
-                      <h3 className="font-display font-semibold text-lg">{side.title}</h3>
-                    </div>
-                    <ul className="space-y-2">
-                      {side.items.map((item) => (
-                        <li key={item} className={`flex items-start gap-3 font-body text-sm ${t.textMuted}`}>
-                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
+          <Reveal delay={120} className="lg:col-span-2">
+            <div className="grid grid-cols-2 gap-4">
+              {/* hero tile */}
+              <div className="relative col-span-2 overflow-hidden rounded-3xl bg-red-400 p-6 sm:p-7 text-slate-950 shadow-lg shadow-red-400/20 transition-transform duration-300 hover:-translate-y-0.5">
+                <Code2 size={20} className="relative opacity-70" />
+                <Code2 size={140} aria-hidden="true" className="pointer-events-none absolute -bottom-8 -right-6 opacity-10" />
+                <p className="relative font-display text-6xl sm:text-7xl font-bold leading-none mt-8">{ALL_PROJECTS.length}</p>
+                <p className="relative font-body text-sm font-medium mt-2 opacity-80">Projects</p>
+              </div>
+
+              {[
+                { n: CERTIFICATIONS.length, label: "Certificates", Icon: CheckCircle2 },
+                { n: EXPERIENCE.length, label: "Activities", Icon: Briefcase },
+              ].map(({ n, label, Icon }) => (
+                <div
+                  key={label}
+                  className={`card-glow relative overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-5 sm:p-6 hover:border-red-400/40`}
+                >
+                  <Icon size={18} className={t.accent} />
+                  <p className="font-display text-4xl sm:text-5xl font-bold leading-none mt-6">{n}</p>
+                  <p className={`font-body text-sm ${t.textMuted} mt-2`}>{label}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
 
         <div className="mt-20">
