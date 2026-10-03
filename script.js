@@ -1174,6 +1174,7 @@ function App() {
   const [booting, setBooting] = useState(true);
   const [bootScreenMounted, setBootScreenMounted] = useState(true);
   const [bootBar, setBootBar] = useState(0);
+  const [openExp, setOpenExp] = useState(null); // index of the experience card whose details are open
 
   const t = isDark ? theme.dark : theme.light;
   const progress = useScrollProgress();
@@ -1757,9 +1758,27 @@ function App() {
                       </div>
                     </div>
 
-                    <p className={`font-body text-sm leading-relaxed ${t.textMuted} mt-4`}>
-                      {exp.description}
-                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setOpenExp(openExp === i ? null : i)}
+                      aria-expanded={openExp === i}
+                      aria-controls={`exp-details-${i}`}
+                      className={`mt-4 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${t.accent} hover:opacity-80 transition-opacity`}
+                    >
+                      What did I do
+                      <ChevronDown size={14} className={`transition-transform duration-300 ${openExp === i ? "rotate-180" : ""}`} />
+                    </button>
+
+                    <div
+                      id={`exp-details-${i}`}
+                      className={`grid transition-[grid-template-rows] duration-300 ease-out ${openExp === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className={`font-body text-sm leading-relaxed ${t.textMuted} pt-3`}>
+                          {exp.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </Reveal>
               );
