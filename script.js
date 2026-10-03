@@ -1422,21 +1422,73 @@ function App() {
 
       {/* ABOUT */}
       <section id="about" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
-        <div className="max-w-3xl">
-          <Reveal>
+        <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+          <Reveal className="lg:col-span-3">
             <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
               <User size={13} /> 01 · WHO I AM
             </p>
-            <h2 className={`font-display text-2xl sm:text-3xl font-bold ${t.text} mb-6`}>About Me</h2>
-            <p className={`font-body leading-relaxed ${t.textMuted}`}>
-              Hi, I'm <span className={`font-semibold ${t.text}`}>{PROFILE.name}</span>. I'm a Computer
-              Engineering student who builds software and understands the network it runs on. On the software
-              side, I've delivered a restaurant POS, a movie-lookup web app, and a published Roblox game.
-              On the networking and IT side, I've built a Python home-network monitor, worked through VLANs and
-              subnetting in Cisco Packet Tracer, and supported a barangay office through SPES. I'm looking for an
-              internship where both sides are useful.
+            <h2 className={`font-display text-3xl sm:text-4xl font-bold ${t.text} mb-6`}>About Me</h2>
+            <p className={`font-display text-xl sm:text-2xl font-medium leading-snug ${t.text}`}>
+              Hi, I'm <span className={t.accent}>RK</span>. I'm a Computer Engineering student who builds
+              software and understands the network it runs on.
             </p>
+            <p className={`font-body leading-relaxed ${t.textMuted} mt-5 max-w-xl`}>
+              I'm looking for an internship where both sides are useful.
+            </p>
+            <div className="flex flex-wrap gap-2.5 mt-7">
+              <span className={`inline-flex items-center gap-2 rounded-full border ${t.border} ${t.surface} px-3.5 py-1.5 font-mono text-xs ${t.textMuted}`}>
+                <MapPin size={13} className={t.accent} /> {PROFILE.location}
+              </span>
+              <span className={`inline-flex items-center gap-2 rounded-full border ${t.border} ${t.surface} px-3.5 py-1.5 font-mono text-xs ${t.textMuted}`}>
+                <GraduationCap size={13} className={t.accent} /> Computer Engineering
+              </span>
+              <span className={`inline-flex items-center gap-2 rounded-full border border-red-400/30 bg-red-400/10 px-3.5 py-1.5 font-mono text-xs ${t.accent}`}>
+                <span className="h-1.5 w-1.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
+                Looking for an internship
+              </span>
+            </div>
           </Reveal>
+
+          <div className="lg:col-span-2 grid gap-4">
+            {[
+              {
+                title: "Software",
+                icon: Code2,
+                items: ["Restaurant POS", "Movie-lookup web app", "Published Roblox game"],
+              },
+              {
+                title: "Networking & IT",
+                icon: Network,
+                items: [
+                  "Python home-network monitor",
+                  "VLANs and subnetting in Cisco Packet Tracer",
+                  "Barangay office support through SPES",
+                ],
+              },
+            ].map((side, i) => {
+              const SideIcon = side.icon;
+              return (
+                <Reveal key={side.title} delay={120 + i * 100}>
+                  <div className={`card-glow rounded-2xl border ${t.border} ${t.surface} p-5 sm:p-6 hover:border-red-400/40`}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className={`h-10 w-10 rounded-xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50"} ${t.accent} flex items-center justify-center`}>
+                        <SideIcon size={18} />
+                      </div>
+                      <h3 className="font-display font-semibold text-lg">{side.title}</h3>
+                    </div>
+                    <ul className="space-y-2">
+                      {side.items.map((item) => (
+                        <li key={item} className={`flex items-start gap-3 font-body text-sm ${t.textMuted}`}>
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
         </div>
 
         <div className="mt-20">
