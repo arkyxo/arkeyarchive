@@ -223,6 +223,7 @@ const RFID_PROJECT = {
   ],
   tags: ["VB.NET", "SQL", "RFID", "Hardware Integration"],
   github: "https://github.com/EngrPrenz/Robinson-s-Mall-RFID-Parking-System",
+  liveDemo: false, // no live demo: shows a disabled, slashed button. Delete this line to re-enable.
   thumbnail: asset_06a80c2f,
 };
 
@@ -249,6 +250,7 @@ const LABS = [
     ],
     tags: ["Python", "SQLite", "Ping Sweep", "Telegram/Discord Alerts"],
     github: "https://github.com/arkyxo/home-network-monitor",
+    liveDemo: false, // no live demo: shows a disabled, slashed button. Delete this line to re-enable.
     thumbnail: asset_b2fc0f05,
   },
   { ...RFID_PROJECT, category: "Hardware" },
@@ -1134,63 +1136,52 @@ function ProjectArchive({ t, onClose }) {
   };
   const visible = ALL_PROJECTS.filter((p) => matches(p, filter));
 
-  const trackStyle = {
-    Software: "bg-red-400/10 text-red-400",
-    "Networking & IT": "bg-blue-400/10 text-blue-400",
-    Both: "bg-amber-400/10 text-amber-500",
+  const trackColor = {
+    Software: "text-red-400",
+    "Networking & IT": "text-blue-400",
+    Both: "text-amber-500",
   };
 
   return (
     <div className={`fixed inset-0 z-[60] overflow-y-auto ${t.bg} ${t.text}`}>
-      <div className="max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
-        <button
-          onClick={onClose}
-          className={`inline-flex items-center gap-2 rounded-full border ${t.border} ${t.surface} px-4 py-2 font-body text-xs font-medium ${t.textMuted} transition-all duration-300 hover:border-red-400/60 hover:text-red-400`}
-        >
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
+        <button onClick={onClose} className={`inline-flex items-center gap-2 font-mono text-xs ${t.textMuted} hover:text-red-400 transition-colors`}>
           <ArrowRight size={14} className="rotate-180" /> Back to portfolio
         </button>
+        <h1 className="font-display font-bold text-4xl sm:text-6xl mt-12">Project Log</h1>
+        <p className={`font-mono text-sm ${t.accent} mt-3`}>Everything I've built, wired up, and shipped.</p>
 
-        <div className="mt-12 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h1 className="font-display font-bold tracking-tight text-4xl sm:text-6xl">Project Log</h1>
-            <p className={`font-body text-base ${t.textMuted} mt-3`}>Everything I've built, wired up, and shipped.</p>
+        {/* filters: plain text tabs, same style as the Tech Stack section headings */}
+        <div className="mt-12 flex items-center gap-4 sm:gap-6">
+          <div className="flex flex-wrap items-center gap-x-5 sm:gap-x-7 gap-y-2">
+            {filters.map((f) => {
+              const active = filter === f;
+              const count = ALL_PROJECTS.filter((p) => matches(p, f)).length;
+              return (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  aria-pressed={active}
+                  className={`font-mono text-xs tracking-[0.25em] uppercase transition-colors ${
+                    active ? "text-red-400" : `${t.textFaint} hover:text-red-400`
+                  }`}
+                >
+                  {f} <span className="opacity-60">{count}</span>
+                </button>
+              );
+            })}
           </div>
-          <span className={`rounded-full border ${t.border} ${t.surface} px-4 py-2 font-mono text-xs ${t.textMuted}`}>
-            <span className={t.accent}>{visible.length}</span> {visible.length === 1 ? "project" : "projects"}
-          </span>
+          <span className={`hidden sm:block h-px flex-1 border-t ${t.border}`} />
         </div>
 
-        {/* filter pills */}
-        <div className="mt-8 flex flex-wrap gap-2">
-          {filters.map((f) => {
-            const active = filter === f;
-            const count = ALL_PROJECTS.filter((p) => matches(p, f)).length;
-            return (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                aria-pressed={active}
-                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-body text-sm font-medium transition-all duration-300 ${
-                  active
-                    ? "border-red-400 bg-red-400 text-slate-950"
-                    : `${t.border} ${t.surface} ${t.textMuted} hover:border-red-400/60 hover:text-red-400`
-                }`}
-              >
-                {f}
-                <span className={`font-mono text-[11px] ${active ? "text-slate-950/70" : t.textFaint}`}>{count}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* project cards */}
-        <div className="mt-8 space-y-3">
+        {/* project rows */}
+        <div className="mt-4">
           {visible.map((p) => {
             const track = trackOf(p.title);
             return (
               <article
                 key={p.title}
-                className={`group flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5 rounded-2xl border ${t.border} ${t.surface} p-4 sm:p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-red-400/50 hover:shadow-lg hover:shadow-red-400/5`}
+                className={`group flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 border-b ${t.border} py-6`}
               >
                 {p.thumbnail ? (
                   <img
@@ -1198,44 +1189,27 @@ function ProjectArchive({ t, onClose }) {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    className="hidden sm:block h-[72px] w-[116px] shrink-0 rounded-xl object-cover object-top"
+                    className="hidden sm:block h-[72px] w-[116px] shrink-0 rounded-lg object-cover object-top"
                   />
                 ) : (
-                  <div className={`hidden sm:flex h-[72px] w-[116px] shrink-0 items-center justify-center rounded-xl bg-red-400/10 font-display text-2xl font-bold ${t.accent}`}>
+                  <div className={`hidden sm:flex h-[72px] w-[116px] shrink-0 items-center justify-center rounded-lg bg-red-400/10 font-display text-2xl font-bold ${t.accent}`}>
                     {p.title.charAt(0)}
                   </div>
                 )}
 
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className={`font-mono text-xs ${t.textFaint}`}>{yearOf(p)}</span>
-                    <span className={`rounded-full px-2.5 py-0.5 font-body text-[11px] font-medium ${trackStyle[track] || trackStyle.Both}`}>
-                      {track}
-                    </span>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs">
+                    <span className={t.accent}>{yearOf(p)}</span>
+                    <span className={trackColor[track] || trackColor.Both}>{track}</span>
                   </div>
-                  <h2 className="font-display text-lg sm:text-xl font-semibold tracking-tight mt-1.5">{p.title}</h2>
-                  <div className="mt-2.5 flex flex-wrap gap-1.5">
-                    {p.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className={`rounded-md border ${t.border} px-2 py-0.5 font-mono text-[11px] ${t.textMuted}`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  <h2 className="font-display text-lg sm:text-xl font-semibold mt-1.5 transition-colors group-hover:text-red-400">{p.title}</h2>
+                  <p className={`mt-2 font-mono text-xs leading-relaxed ${t.textFaint}`}>{p.tags.join(" · ")}</p>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2">
+                <div className={`flex shrink-0 items-center gap-4 ${t.textMuted}`}>
                   {hasLink(p.github) && (
-                    <a
-                      href={p.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} on GitHub`}
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl border ${t.border} ${t.textMuted} transition-all duration-300 hover:border-red-400/60 hover:text-red-400`}
-                    >
-                      <Github size={17} />
+                    <a href={p.github} target="_blank" rel="noreferrer" aria-label={`${p.title} on GitHub`} className="hover:text-red-400 transition-colors">
+                      <Github size={19} />
                     </a>
                   )}
                   {p.liveDemo === false ? (
@@ -1243,20 +1217,14 @@ function ProjectArchive({ t, onClose }) {
                       role="img"
                       aria-label={`${p.title} live demo unavailable`}
                       title="Live demo unavailable"
-                      className={`flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-xl border ${t.border} ${t.textFaint} opacity-50`}
+                      className="cursor-not-allowed opacity-40"
                     >
-                      <ExternalLinkOff size={17} />
+                      <ExternalLinkOff size={19} />
                     </span>
                   ) : (
                     hasLink(p.view) && (
-                      <a
-                        href={p.view}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`${p.title} preview`}
-                        className={`flex h-10 w-10 items-center justify-center rounded-xl border ${t.border} ${t.textMuted} transition-all duration-300 hover:border-red-400/60 hover:text-red-400`}
-                      >
-                        <ExternalLink size={17} />
+                      <a href={p.view} target="_blank" rel="noreferrer" aria-label={`${p.title} preview`} className="hover:text-red-400 transition-colors">
+                        <ExternalLink size={19} />
                       </a>
                     )
                   )}
