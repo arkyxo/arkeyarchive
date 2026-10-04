@@ -105,6 +105,16 @@ const PROFILE = {
 
 const hasLink = (u) => !!u && u !== "#";
 
+// Live-demo icon with a "/" through it, for projects whose demo is down or not published yet.
+const ExternalLinkOff = ({ size = 19 }) => (
+  <span className="relative inline-flex" style={{ width: size, height: size }}>
+    <ExternalLink size={size} />
+    <svg className="absolute inset-0" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+      <path d="M3.5 20.5 20.5 3.5" />
+    </svg>
+  </span>
+);
+
 const RESUME_FILES = [
   {
     label: "Software CV",
@@ -275,6 +285,7 @@ const WEB_APPS_LIST = [
     github: "https://github.com/arkyxo/CineLookUp",
     docs: "https://drive.google.com/file/d/1XKAlyra-MNK6gRcbQP-T2tMv4SkDx6T6/view?usp=drive_link",
     view: "https://drive.google.com/file/d/19PUJdJcvxdg1-alfcLY1QttqLZY6BkHT/view?usp=sharing",
+    liveDemo: false, // demo is down / not published: shows a disabled, slashed button. Delete this line to re-enable.
     thumbnail: asset_f42ac97a,
   },
   {
@@ -1227,16 +1238,27 @@ function ProjectArchive({ t, onClose }) {
                       <Github size={17} />
                     </a>
                   )}
-                  {hasLink(p.view) && (
-                    <a
-                      href={p.view}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} preview`}
-                      className={`flex h-10 w-10 items-center justify-center rounded-xl border ${t.border} ${t.textMuted} transition-all duration-300 hover:border-red-400/60 hover:text-red-400`}
+                  {p.liveDemo === false ? (
+                    <span
+                      role="img"
+                      aria-label={`${p.title} live demo unavailable`}
+                      title="Live demo unavailable"
+                      className={`flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-xl border ${t.border} ${t.textFaint} opacity-50`}
                     >
-                      <ExternalLink size={17} />
-                    </a>
+                      <ExternalLinkOff size={17} />
+                    </span>
+                  ) : (
+                    hasLink(p.view) && (
+                      <a
+                        href={p.view}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={`${p.title} preview`}
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl border ${t.border} ${t.textMuted} transition-all duration-300 hover:border-red-400/60 hover:text-red-400`}
+                      >
+                        <ExternalLink size={17} />
+                      </a>
+                    )
                   )}
                 </div>
               </article>
@@ -1860,8 +1882,19 @@ function App() {
                       {hasLink(item.github) && (
                         <a href={item.github} target="_blank" rel="noreferrer" aria-label={`${item.title} on GitHub`} className="hover:text-red-400 transition-colors"><Github size={19} /></a>
                       )}
-                      {hasLink(item.view) && (
-                        <a href={item.view} target="_blank" rel="noreferrer" aria-label={`${item.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={19} /></a>
+                      {item.liveDemo === false ? (
+                        <span
+                          role="img"
+                          aria-label={`${item.title} live demo unavailable`}
+                          title="Live demo unavailable"
+                          className="cursor-not-allowed opacity-40"
+                        >
+                          <ExternalLinkOff size={19} />
+                        </span>
+                      ) : (
+                        hasLink(item.view) && (
+                          <a href={item.view} target="_blank" rel="noreferrer" aria-label={`${item.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={19} /></a>
+                        )
                       )}
                     </div>
                   </div>
