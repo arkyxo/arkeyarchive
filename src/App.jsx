@@ -32,6 +32,7 @@ import asset_77ad849f from "./assets/asset-77ad849f.png";
 import asset_39871438 from "./assets/asset-39871438.png";
 import asset_96851f8e from "./assets/asset-96851f8e.png";
 import asset_5fd2cb0e from "./assets/asset-5fd2cb0e.png";
+import amaLogo from "./assets/ama-logo.png";
 
 /* ============================================================
    Icon components (replaces the `lucide-react` import so this
@@ -369,6 +370,18 @@ const CERTIFICATIONS = [
     verifyLabel: "Verify",
     verifyUrl: "https://coursera.org/verify/specialization/YIFFE8OFQH60",
     certificateUrl: "https://coursera.org/verify/specialization/YIFFE8OFQH60",
+  },
+  {
+    image: amaLogo,
+    name: "Cyber Threat Intelligence Analysis (CTIA) Level III",
+    org: "AMA University · TESDA-recognized · 92-hour training",
+    group: "Networking & IT",
+    category: "Cybersecurity",
+    date: "Upcoming",
+    expires: null,
+    credentialId: null,
+    status: "Upcoming",
+    skills: ["Cyber Threat Intelligence", "Threat Analysis", "Digital Defense"],
   },
 ];
 
@@ -1611,7 +1624,7 @@ function App() {
               </div>
 
               {[
-                { n: CERTIFICATIONS.length, label: "Certificates", Icon: CheckCircle2 },
+                { n: CERTIFICATIONS.filter((c) => c.status === "Earned").length, label: "Certificates", Icon: CheckCircle2 },
                 { n: EXPERIENCE.length, label: "Activities", Icon: Briefcase },
               ].map(({ n, label, Icon }) => (
                 <div
@@ -1809,7 +1822,7 @@ function App() {
           />
           <div className={CERTIFICATIONS.length === 1 ? "max-w-3xl mx-auto" : "grid sm:grid-cols-2 gap-6"}>
             {CERTIFICATIONS.map((cert, i) => {
-              const earned = cert.status !== "In Progress" && cert.status !== "Planned";
+              const earned = !["In Progress", "Planned", "Upcoming"].includes(cert.status);
               const StatusIcon = earned ? CheckCircle2 : Clock;
               const pill = earned ? "bg-red-400/10 text-red-400" : "bg-amber-400/10 text-amber-500";
               return (
@@ -1828,7 +1841,7 @@ function App() {
                       {/* Badge */}
                       <div className="shrink-0">
                         {cert.image ? (
-                          <img src={cert.image} alt={`${cert.name} badge`} className="h-20 w-20 rounded-2xl bg-white object-contain p-3.5 shadow-lg shadow-black/10 ring-1 ring-black/5" />
+                          <img src={cert.image} alt={`${cert.name} badge`} className="h-20 min-w-[5rem] w-auto max-w-[11rem] rounded-2xl bg-white object-contain p-3.5 shadow-lg shadow-black/10 ring-1 ring-black/5" />
                         ) : (
                           <div className={`h-20 w-20 rounded-2xl flex items-center justify-center ${pill}`}>
                             <StatusIcon size={30} />
