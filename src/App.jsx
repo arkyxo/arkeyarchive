@@ -105,16 +105,6 @@ const PROFILE = {
 
 const hasLink = (u) => !!u && u !== "#";
 
-// Live-demo icon with a "/" through it, for projects whose demo is down or not published yet.
-const ExternalLinkOff = ({ size = 19 }) => (
-  <span className="relative inline-flex" style={{ width: size, height: size }}>
-    <ExternalLink size={size} />
-    <svg className="absolute inset-0" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
-      <path d="M3.5 20.5 20.5 3.5" />
-    </svg>
-  </span>
-);
-
 const RESUME_FILES = [
   {
     label: "Software CV",
@@ -223,7 +213,6 @@ const RFID_PROJECT = {
   ],
   tags: ["VB.NET", "SQL", "RFID", "Hardware Integration"],
   github: "https://github.com/EngrPrenz/Robinson-s-Mall-RFID-Parking-System",
-  liveDemo: false, // no live demo: shows a disabled, slashed button. Delete this line to re-enable.
   thumbnail: asset_06a80c2f,
 };
 
@@ -250,7 +239,6 @@ const LABS = [
     ],
     tags: ["Python", "SQLite", "Ping Sweep", "Telegram/Discord Alerts"],
     github: "https://github.com/arkyxo/home-network-monitor",
-    liveDemo: false, // no live demo: shows a disabled, slashed button. Delete this line to re-enable.
     thumbnail: asset_b2fc0f05,
   },
   { ...RFID_PROJECT, category: "Hardware" },
@@ -287,7 +275,6 @@ const WEB_APPS_LIST = [
     github: "https://github.com/arkyxo/CineLookUp",
     docs: "https://drive.google.com/file/d/1XKAlyra-MNK6gRcbQP-T2tMv4SkDx6T6/view?usp=drive_link",
     view: "https://drive.google.com/file/d/19PUJdJcvxdg1-alfcLY1QttqLZY6BkHT/view?usp=sharing",
-    liveDemo: false, // demo is down / not published: shows a disabled, slashed button. Delete this line to re-enable.
     thumbnail: asset_f42ac97a,
   },
   {
@@ -1121,26 +1108,11 @@ function SkillsArchive({ t, onClose, isDark }) {
 }
 
 function ProjectArchive({ t, onClose }) {
-  const [filter, setFilter] = useState("All");
-
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
-
-  const filters = ["All", "Software", "Networking & IT"];
-  const matches = (p, f) => {
-    const track = trackOf(p.title);
-    return f === "All" || track === f || track === "Both";
-  };
-  const visible = ALL_PROJECTS.filter((p) => matches(p, filter));
-
-  const trackColor = {
-    Software: "text-red-400",
-    "Networking & IT": "text-blue-400",
-    Both: "text-amber-500",
-  };
 
   return (
     <div className={`fixed inset-0 z-[60] overflow-y-auto ${t.bg} ${t.text}`}>
@@ -1151,88 +1123,42 @@ function ProjectArchive({ t, onClose }) {
         <h1 className="font-display font-bold text-4xl sm:text-6xl mt-12">Project Log</h1>
         <p className={`font-mono text-sm ${t.accent} mt-3`}>Everything I've built, wired up, and shipped.</p>
 
-        {/* filters: plain text tabs, same style as the Tech Stack section headings */}
-        <div className="mt-12 flex items-center gap-4 sm:gap-6">
-          <div className="flex flex-wrap items-center gap-x-5 sm:gap-x-7 gap-y-2">
-            {filters.map((f) => {
-              const active = filter === f;
-              const count = ALL_PROJECTS.filter((p) => matches(p, f)).length;
+        <table className="w-full text-left mt-12">
+          <thead>
+            <tr className={`font-mono text-xs uppercase tracking-wider ${t.textFaint} border-b ${t.border}`}>
+              <th className="py-3 pr-4 font-medium">Year</th>
+              <th className="py-3 pr-4 font-medium">Project</th>
+              <th className="py-3 pr-4 font-medium">Track</th>
+              <th className="py-3 pr-4 font-medium hidden sm:table-cell">Stack</th>
+              <th className="py-3 font-medium">Links</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ALL_PROJECTS.map((p) => {
+              const track = trackOf(p.title);
+              const trackColor =
+                track === "Both" ? "text-amber-500" : track === "Software" ? "text-red-400" : "text-blue-400";
               return (
-                <button
-                  key={f}
-                  onClick={() => setFilter(f)}
-                  aria-pressed={active}
-                  className={`font-mono text-xs tracking-[0.25em] uppercase transition-colors ${
-                    active ? "text-red-400" : `${t.textFaint} hover:text-red-400`
-                  }`}
-                >
-                  {f} <span className="opacity-60">{count}</span>
-                </button>
+              <tr key={p.title} className={`border-b ${t.border} hover:bg-red-400/5 transition-colors align-top`}>
+                <td className={`py-4 pr-4 font-mono text-sm ${t.accent}`}>{yearOf(p)}</td>
+                <td className="py-4 pr-4 font-display font-semibold">{p.title}</td>
+                <td className={`py-4 pr-4 font-mono text-[11px] whitespace-nowrap ${trackColor}`}>{track}</td>
+                <td className={`py-4 pr-4 font-mono text-xs leading-relaxed ${t.textFaint} hidden sm:table-cell`}>{p.tags.join(" · ")}</td>
+                <td className="py-4">
+                  <div className={`flex items-center gap-3 ${t.textMuted}`}>
+                    {hasLink(p.github) && (
+                      <a href={p.github} target="_blank" rel="noreferrer" aria-label={`${p.title} on GitHub`} className="hover:text-red-400 transition-colors"><Github size={17} /></a>
+                    )}
+                    {hasLink(p.view) && (
+                      <a href={p.view} target="_blank" rel="noreferrer" aria-label={`${p.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={17} /></a>
+                    )}
+                  </div>
+                </td>
+              </tr>
               );
             })}
-          </div>
-          <span className={`hidden sm:block h-px flex-1 border-t ${t.border}`} />
-        </div>
-
-        {/* project rows */}
-        <div className="mt-4">
-          {visible.map((p) => {
-            const track = trackOf(p.title);
-            return (
-              <article
-                key={p.title}
-                className={`group flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 border-b ${t.border} py-6`}
-              >
-                {p.thumbnail ? (
-                  <img
-                    src={p.thumbnail}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="hidden sm:block h-[72px] w-[116px] shrink-0 rounded-lg object-cover object-top"
-                  />
-                ) : (
-                  <div className={`hidden sm:flex h-[72px] w-[116px] shrink-0 items-center justify-center rounded-lg bg-red-400/10 font-display text-2xl font-bold ${t.accent}`}>
-                    {p.title.charAt(0)}
-                  </div>
-                )}
-
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs">
-                    <span className={t.accent}>{yearOf(p)}</span>
-                    <span className={trackColor[track] || trackColor.Both}>{track}</span>
-                  </div>
-                  <h2 className="font-display text-lg sm:text-xl font-semibold mt-1.5 transition-colors group-hover:text-red-400">{p.title}</h2>
-                  <p className={`mt-2 font-mono text-xs leading-relaxed ${t.textFaint}`}>{p.tags.join(" · ")}</p>
-                </div>
-
-                <div className={`flex shrink-0 items-center gap-4 ${t.textMuted}`}>
-                  {hasLink(p.github) && (
-                    <a href={p.github} target="_blank" rel="noreferrer" aria-label={`${p.title} on GitHub`} className="hover:text-red-400 transition-colors">
-                      <Github size={19} />
-                    </a>
-                  )}
-                  {p.liveDemo === false ? (
-                    <span
-                      role="img"
-                      aria-label={`${p.title} live demo unavailable`}
-                      title="Live demo unavailable"
-                      className="cursor-not-allowed opacity-40"
-                    >
-                      <ExternalLinkOff size={19} />
-                    </span>
-                  ) : (
-                    hasLink(p.view) && (
-                      <a href={p.view} target="_blank" rel="noreferrer" aria-label={`${p.title} preview`} className="hover:text-red-400 transition-colors">
-                        <ExternalLink size={19} />
-                      </a>
-                    )
-                  )}
-                </div>
-              </article>
-            );
-          })}
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   );
@@ -1850,19 +1776,8 @@ function App() {
                       {hasLink(item.github) && (
                         <a href={item.github} target="_blank" rel="noreferrer" aria-label={`${item.title} on GitHub`} className="hover:text-red-400 transition-colors"><Github size={19} /></a>
                       )}
-                      {item.liveDemo === false ? (
-                        <span
-                          role="img"
-                          aria-label={`${item.title} live demo unavailable`}
-                          title="Live demo unavailable"
-                          className="cursor-not-allowed opacity-40"
-                        >
-                          <ExternalLinkOff size={19} />
-                        </span>
-                      ) : (
-                        hasLink(item.view) && (
-                          <a href={item.view} target="_blank" rel="noreferrer" aria-label={`${item.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={19} /></a>
-                        )
+                      {hasLink(item.view) && (
+                        <a href={item.view} target="_blank" rel="noreferrer" aria-label={`${item.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={19} /></a>
                       )}
                     </div>
                   </div>
