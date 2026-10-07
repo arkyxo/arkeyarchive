@@ -28,6 +28,7 @@ import asset_9e429332 from "./assets/asset-9e429332.jpg";
 import asset_54b305ed from "./assets/asset-54b305ed.png";
 import asset_4ce99605 from "./assets/asset-4ce99605.png";
 import asset_11af5d6e from "./assets/asset-11af5d6e.png";
+import techbizLogo from "./assets/techbizacademy-logo.png";
 import asset_77ad849f from "./assets/asset-77ad849f.png";
 import asset_39871438 from "./assets/asset-39871438.png";
 import asset_96851f8e from "./assets/asset-96851f8e.png";
@@ -387,6 +388,14 @@ const CERTIFICATIONS = [
 ];
 
 const EXPERIENCE = [
+  {
+    company: "TechBizAcademy",
+    position: "SOC Analyst Intern",
+    logo: techbizLogo,
+    duration: "Oct 16 — Nov 27, 2026",
+    type: "Networking & IT · Internship",
+    description: "",
+  },
   {
     company: "GCash Hackathon",
     position: "Hackathon",
