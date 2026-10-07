@@ -88,6 +88,7 @@ const MapPin = makeIcon(<><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0
 const ImageIcon = makeIcon(<><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.1-3.1a2 2 0 0 0-2.83 0L6 21" /></>);
 const ArrowRight = makeIcon(<><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>);
 const User = makeIcon(<><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></>);
+const Trophy = makeIcon(<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></>);
 const Wrench = makeIcon(<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />);
 
 /* ============================================================
@@ -979,7 +980,6 @@ function EducationCard({ edu, t, isDark }) {
       className={`card-glow group relative overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-7 sm:p-8 h-full flex flex-col hover:border-red-400/40`}
     >
       {/* soft red light + giant faded year for depth */}
-      <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-red-400/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100 opacity-70" />
       <span
         aria-hidden="true"
         className={`pointer-events-none select-none absolute -bottom-6 -right-2 font-display font-bold leading-none text-[8rem] sm:text-[9rem] ${isDark ? "text-white/[0.035]" : "text-slate-900/[0.04]"}`}
@@ -1614,29 +1614,30 @@ function App() {
           </Reveal>
 
           <Reveal delay={120} className="lg:col-span-2">
-            <div className="grid grid-cols-2 gap-4">
-              {/* hero tile */}
-              <div className="relative col-span-2 overflow-hidden rounded-3xl bg-red-400 p-6 sm:p-7 text-slate-950 shadow-lg shadow-red-400/20 transition-transform duration-300 hover:-translate-y-0.5">
-                <Code2 size={20} className="relative opacity-70" />
-                <Code2 size={140} aria-hidden="true" className="pointer-events-none absolute -bottom-8 -right-6 opacity-10" />
-                <p className="relative font-display text-6xl sm:text-7xl font-bold leading-none mt-8">{ALL_PROJECTS.length}</p>
-                <p className="relative font-body text-sm font-medium mt-2 opacity-80">Projects</p>
-              </div>
+            {(() => {
+              const hackathons = EXPERIENCE.filter((e) => e.position === "Hackathon");
+              return (
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  {/* Projects — dark feature card */}
+                  <div className={`group relative overflow-hidden rounded-[28px] p-5 sm:p-7 min-h-[200px] sm:min-h-[240px] flex flex-col justify-end text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-500/20 ${isDark ? "bg-slate-900 ring-1 ring-white/10" : "bg-slate-950"}`}>
+                    <div className="relative">
+                      <p className="font-display text-6xl sm:text-8xl font-bold leading-none tracking-tight">{ALL_PROJECTS.length}</p>
+                      <p className="font-body text-sm sm:text-base font-medium mt-3 text-white">Projects</p>
+                      <p className="font-body text-xs text-white/50 mt-0.5">Software &amp; Networking</p>
+                    </div>
+                  </div>
 
-              {[
-                { n: CERTIFICATIONS.filter((c) => c.status === "Earned").length, label: "Certificates", Icon: CheckCircle2 },
-                { n: EXPERIENCE.length, label: "Activities", Icon: Briefcase },
-              ].map(({ n, label, Icon }) => (
-                <div
-                  key={label}
-                  className={`card-glow relative overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-5 sm:p-6 hover:border-red-400/40`}
-                >
-                  <Icon size={18} className={t.accent} />
-                  <p className="font-display text-4xl sm:text-5xl font-bold leading-none mt-6">{n}</p>
-                  <p className={`font-body text-sm ${t.textMuted} mt-2`}>{label}</p>
+                  {/* Hackathon — soft glass card */}
+                  <div className={`group relative overflow-hidden rounded-[28px] border ${t.border} p-5 sm:p-7 min-h-[200px] sm:min-h-[240px] flex flex-col justify-end transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-400/15 hover:border-red-400/40 ${isDark ? "bg-slate-900" : "bg-red-50"}`}>
+                    <div className="relative">
+                      <p className="font-display text-6xl sm:text-8xl font-bold leading-none tracking-tight">{hackathons.length}</p>
+                      <p className="font-body text-sm sm:text-base font-medium mt-3">Hackathon</p>
+                      <p className={`font-body text-xs ${t.textMuted} mt-0.5`}>{hackathons.map((h) => h.company.replace(/ Hackathon$/, "")).join(", ") || "—"}</p>
+                    </div>
+                  </div>
                 </div>
-              ))}
-            </div>
+              );
+            })()}
           </Reveal>
         </div>
 
@@ -1768,7 +1769,6 @@ function App() {
                         </>
                       ) : (
                         <div className={`absolute inset-0 flex flex-col items-center justify-center gap-3 bg-red-400/10 ${t.accent}`}>
-                          <div className="absolute inset-0 bg-grid opacity-[0.06]" />
                           <GroupIcon size={40} />
                           <span className="relative font-mono text-xs tracking-widest uppercase">{item.eyebrow}</span>
                         </div>
@@ -1829,7 +1829,6 @@ function App() {
                 <Reveal key={cert.name} delay={i * 80} className="h-full">
                   <div className={`card-glow group relative h-full overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-7 sm:p-9 hover:border-red-400/40`}>
                     {/* ambient glow + giant faded index */}
-                    <div className="pointer-events-none absolute -top-28 -left-20 h-72 w-72 rounded-full bg-red-400/10 blur-3xl opacity-70 group-hover:opacity-100 transition-opacity duration-500" />
                     <span
                       aria-hidden="true"
                       className={`pointer-events-none select-none absolute -bottom-8 right-3 font-display font-bold leading-none text-[9rem] ${isDark ? "text-white/[0.035]" : "text-slate-900/[0.04]"}`}
@@ -1913,7 +1912,7 @@ function App() {
         />
 
         <div className="relative max-w-3xl mx-auto">
-          {/* Gradient rail */}
+          {/* Rail */}
           <div className="absolute top-2 bottom-2 left-[11px] w-px bg-red-400/30" />
 
           <div className="space-y-6">
