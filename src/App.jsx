@@ -35,12 +35,6 @@ import asset_96851f8e from "./assets/asset-96851f8e.png";
 import asset_5fd2cb0e from "./assets/asset-5fd2cb0e.png";
 import amaLogo from "./assets/ama-logo.png";
 
-/* ============================================================
-   Icon components (replaces the `lucide-react` import so this
-   file can run directly in the browser via CDN React + Babel,
-   with no bundler/npm install step required).
-   Same icon set, same names, same usage as before.
-   ============================================================ */
 function makeIcon(paths) {
   return function Icon({ size = 24, className = "", ...props }) {
     return (
@@ -90,11 +84,9 @@ const ImageIcon = makeIcon(<><rect width="18" height="18" x="3" y="3" rx="2" ry=
 const ArrowRight = makeIcon(<><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>);
 const User = makeIcon(<><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></>);
 const Trophy = makeIcon(<><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></>);
+const Users = makeIcon(<><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>);
 const Wrench = makeIcon(<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />);
 
-/* ============================================================
-   EDIT ME — replace with your real details before publishing
-   ============================================================ */
 const PROFILE = {
   name: "RK",
   role: "Software & Networking/IT",
@@ -192,7 +184,6 @@ const SKILLS = [
   },
 ];
 
-// Only show legend entries for levels actually used in SKILLS, most senior first.
 const SKILL_LEGEND = ["core", "working", "basic", "learning"].filter((lvl) =>
   SKILLS.some((group) => group.items.some((item) => item.level === lvl))
 );
@@ -334,11 +325,9 @@ const WEB_APPS_LIST = [
   { ...RFID_PROJECT, category: "Academic" },
 ];
 
-// Display order (most important first)
 const SOFTWARE_ORDER = ["URSAC Simulation Academy", "Salo Sa Antipolo", RFID_PROJECT.title, "CineLookUp"];
 const WEB_APPS = [...WEB_APPS_LIST].sort((a, b) => SOFTWARE_ORDER.indexOf(a.title) - SOFTWARE_ORDER.indexOf(b.title));
 
-// Project log (archive) data: every project once, newest first
 const yearOf = (p) => (p.meta && (p.meta.match(/(\d{4})/) || [])[1]) || "—";
 const contextOf = (p) => (p.meta ? p.meta.split(" · ")[0] : p.category || "Lab");
 const chunk = (arr, size) => {
@@ -387,9 +376,19 @@ const CERTIFICATIONS = [
   },
 ];
 
+const EXPERIENCE_PATHWAYS = [
+  { id: "hackathon", label: "Hackathon", caption: "Competitions & builds" },
+  { id: "internship", label: "Internship", caption: "Industry training" },
+  { id: "organization", label: "Organization", caption: "Student orgs" },
+  { id: "work", label: "Work Experience", caption: "Jobs & programs" },
+];
+
+const PATHWAY_ICONS = { hackathon: Trophy, internship: GraduationCap, organization: Users, work: Briefcase };
+
 const EXPERIENCE = [
   {
     company: "TechBizAcademy",
+    pathway: "internship",
     position: "SOC Analyst Intern",
     logo: techbizLogo,
     duration: "Oct 16 — Nov 27, 2026",
@@ -398,6 +397,7 @@ const EXPERIENCE = [
   },
   {
     company: "GCash Hackathon",
+    pathway: "hackathon",
     position: "Hackathon",
     logo: asset_4ce99605,
     duration: "Sept 2026",
@@ -407,6 +407,7 @@ const EXPERIENCE = [
   },
   {
     company: "Special Program for Employment of Students (DOLE)",
+    pathway: "work",
     position: "SPES",
     logo: asset_11af5d6e,
     duration: "May 2026",
@@ -416,6 +417,7 @@ const EXPERIENCE = [
   },
   {
     company: "Association of Concerned Computer Engineering Students (ACCESS)",
+    pathway: "organization",
     position: "Technical Team",
     logo: asset_77ad849f,
     duration: "2023 — 2024",
@@ -424,8 +426,6 @@ const EXPERIENCE = [
   },
 ];
 
-
-// Optional per-entry fields you can add: logo (image URL / data URI), note (e.g. honors, scholarship).
 const EDUCATION = [
   {
     level: "Bachelor's Degree",
@@ -443,9 +443,6 @@ const EDUCATION = [
   },
 ];
 
-/* ============================================================
-   Theme
-   ============================================================ */
 const theme = {
   dark: {
     bg: "bg-slate-950",
@@ -477,9 +474,6 @@ const theme = {
   },
 };
 
-/* ============================================================
-   Hooks
-   ============================================================ */
 function useScrollProgress() {
   const [progress, setProgress] = useState(0);
   useEffect(() => {
@@ -536,9 +530,6 @@ function Reveal({ children, className = "", delay = 0 }) {
   );
 }
 
-/* ============================================================
-   Animated network topology background (canvas)
-   ============================================================ */
 function NetworkCanvas({ isDark }) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -677,9 +668,6 @@ function NetworkCanvas({ isDark }) {
   );
 }
 
-/* ============================================================
-   Small building blocks
-   ============================================================ */
 function StatusTag({ status, styles }) {
   const s = styles[status] || styles[Object.keys(styles)[0]];
   return (
@@ -716,18 +704,11 @@ function SectionHeading({ eyebrow, title, subtitle, caption, icon: Icon, t }) {
   );
 }
 
-/* ============================================================
-   GitHub contribution activity (real data via a public,
-   no-auth, CORS-enabled API that reads a user's public
-   contribution graph: github-contributions-api.jogruber.de)
-   ============================================================ */
 const DOT_RADIUS_BY_LEVEL = [1.4, 2.2, 3, 3.8, 4.6];
-// Level 0 = no contributions that day; levels 1-4 run light red -> dark red,
-// same idea as GitHub's own green scale.
 const DOT_COLOR_BY_LEVEL = ["#fecaca", "#fca5a5", "#f87171", "#dc2626", "#7f1d1d"];
 
 function GithubActivity({ t, isDark }) {
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [status, setStatus] = useState("loading");
   const [weeks, setWeeks] = useState([]);
   const [stats, setStats] = useState({ total: 0, activeDays: 0, longest: 0, current: 0 });
   const scrollRef = useRef(null);
@@ -745,7 +726,6 @@ function GithubActivity({ t, isDark }) {
         const total = days.reduce((acc, d) => acc + (d.count || 0), 0);
         const activeDays = days.filter((d) => d.count > 0).length;
 
-        // Longest + current streak
         let longest = 0, run = 0;
         days.forEach((d) => {
           run = d.count > 0 ? run + 1 : 0;
@@ -754,11 +734,10 @@ function GithubActivity({ t, isDark }) {
         let current = 0;
         for (let i = days.length - 1; i >= 0; i--) {
           if (days[i].count > 0) current++;
-          else if (i === days.length - 1) continue; // today may not have commits yet
+          else if (i === days.length - 1) continue;
           else break;
         }
 
-        // Group into weeks (columns), Sunday-first rows, matching GitHub's own layout.
         const cols = [];
         let currentWeek = new Array(7).fill(null);
         days.forEach((day) => {
@@ -785,7 +764,6 @@ function GithubActivity({ t, isDark }) {
     };
   }, []);
 
-  // Start scrolled to the most recent weeks on small screens.
   useEffect(() => {
     if (status === "ready" && scrollRef.current) {
       scrollRef.current.scrollLeft = scrollRef.current.scrollWidth;
@@ -835,7 +813,6 @@ function GithubActivity({ t, isDark }) {
       <Reveal>
         <div className={`relative overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-5 sm:p-8 shadow-xl ${isDark ? "shadow-black/20" : "shadow-slate-200/70"}`}>
           <div className="relative">
-            {/* Header */}
             <div className="flex items-center justify-between gap-4">
               <div className="flex min-w-0 items-center gap-3">
                 <img
@@ -885,7 +862,6 @@ function GithubActivity({ t, isDark }) {
 
             {status === "ready" && (
               <>
-                {/* Stat tiles */}
                 <div className="mt-6 grid grid-cols-3 gap-2.5 sm:gap-3">
                   {statTiles.map((s) => (
                     <div
@@ -898,7 +874,6 @@ function GithubActivity({ t, isDark }) {
                   ))}
                 </div>
 
-                {/* Heatmap */}
                 <div className={`mt-4 rounded-2xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50/80"} p-3 sm:p-5`}>
                   <div ref={scrollRef} className="overflow-x-auto pb-1">
                     <svg
@@ -942,7 +917,6 @@ function GithubActivity({ t, isDark }) {
                     </svg>
                   </div>
 
-                  {/* Legend */}
                   <div className={`mt-3 flex items-center justify-between gap-3 font-body text-[11px] ${t.textFaint}`}>
                     <span>{stats.current > 0 ? `${stats.current}-day current streak` : "Keep building"}</span>
                     <span className="inline-flex items-center gap-1.5">
@@ -963,23 +937,232 @@ function GithubActivity({ t, isDark }) {
   );
 }
 
-/* ============================================================
-   Main App
-   ============================================================ */
-/* ============================================================
-   Education cards (enrollment-record style)
-   ============================================================ */
 function eduProgress(duration) {
   const m = String(duration).match(/(\d{4})\D+(\d{4})/);
   if (!m) return { done: true, total: 1, elapsed: 1, startY: "", endY: "" };
-  const start = new Date(+m[1], 5, 1).getTime(); // Jun of start year
-  const end = new Date(+m[2], 3, 30).getTime();  // Apr of end year
+  const start = new Date(+m[1], 5, 1).getTime();
+  const end = new Date(+m[2], 3, 30).getTime();
   const total = Math.max(1, +m[2] - +m[1]);
   const elapsed = Math.max(0, Math.min(total, (Date.now() - start) / (365.25 * 864e5)));
   return { done: Date.now() >= end, total, elapsed, startY: m[1], endY: m[2] };
 }
 const initialsOf = (name) =>
   name.replace(/[—–-].*$/, "").split(" ").filter((w) => /^[A-Z]/.test(w)).slice(0, 3).map((w) => w[0]).join("");
+
+function ExpDetails({ id, open, onToggle, description, t, light = false }) {
+  return (
+    <>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        aria-controls={id}
+        className={`mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${light ? "text-red-300" : t.accent} hover:opacity-80 transition-opacity`}
+      >
+        What did I do
+        <ChevronDown size={14} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+      </button>
+      <div id={id} className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+        <div className="overflow-hidden">
+          <p className={`font-body text-sm leading-relaxed ${light ? "text-white/70" : t.textMuted} pt-3`}>
+            {description || "Details coming soon."}
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
+  const latest = EXPERIENCE[0];
+  const firstPath = EXPERIENCE_PATHWAYS.some((p) => p.id === latest?.pathway) ? latest.pathway : EXPERIENCE_PATHWAYS[0].id;
+  const [openPath, setOpenPath] = useState(firstPath);
+  const [activePath, setActivePath] = useState(firstPath);
+  const [selected, setSelected] = useState({});
+
+  const active = EXPERIENCE_PATHWAYS.find((p) => p.id === activePath);
+  const ActiveIcon = PATHWAY_ICONS[active.id] || Briefcase;
+  const activeEntries = EXPERIENCE.filter((e) => e.pathway === active.id);
+  const mainIdx = Math.min(selected[active.id] || 0, Math.max(activeEntries.length - 1, 0));
+  const main = activeEntries[mainIdx];
+  const detailsKey = `split-${active.id}-${mainIdx}`;
+
+  const togglePath = (id) => {
+    if (openPath === id) {
+      setOpenPath(null);
+      return;
+    }
+    setOpenPath(id);
+    setActivePath(id);
+    setOpenExp(null);
+  };
+  const pickEntry = (pathId, idx) => {
+    setActivePath(pathId);
+    setSelected((prev) => ({ ...prev, [pathId]: idx }));
+    setOpenExp(null);
+  };
+
+  return (
+    <div className="hidden md:grid grid-cols-5 gap-5 lg:gap-6 items-start">
+      <div className="col-span-2 space-y-3">
+        {EXPERIENCE_PATHWAYS.map((path, pi) => {
+          const PathIcon = PATHWAY_ICONS[path.id] || Briefcase;
+          const entries = EXPERIENCE.filter((e) => e.pathway === path.id);
+          const isOpen = openPath === path.id;
+          const isActive = activePath === path.id;
+          return (
+            <Reveal key={path.id} delay={pi * 70}>
+              <div
+                className={`rounded-2xl border ${isActive ? "border-red-400/40" : t.border} ${t.surface} transition-colors duration-300`}
+              >
+                <button
+                  type="button"
+                  onClick={() => togglePath(path.id)}
+                  aria-expanded={isOpen}
+                  aria-controls={`exp-split-${path.id}`}
+                  className="w-full text-left p-4 flex items-center gap-3 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60"
+                >
+                  <div
+                    className={`h-10 w-10 shrink-0 rounded-xl border flex items-center justify-center transition-colors ${
+                      isActive ? "border-red-400 bg-red-400 text-slate-950" : `border-red-400/30 bg-red-400/10 ${t.accent}`
+                    }`}
+                  >
+                    <PathIcon size={18} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className={`font-mono text-[10px] tracking-[0.2em] uppercase ${t.accent}`}>{path.caption}</p>
+                    <h3 className="font-display font-semibold text-base leading-tight">{path.label}</h3>
+                  </div>
+                  <span className={`shrink-0 rounded-full border ${t.border} px-2 py-0.5 font-mono text-[10px] ${t.textMuted}`}>
+                    {String(entries.length).padStart(2, "0")}
+                  </span>
+                  <ChevronDown size={18} className={`shrink-0 ${t.textMuted} transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                <div
+                  id={`exp-split-${path.id}`}
+                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="px-3 pb-3 space-y-1">
+                      {entries.length === 0 && (
+                        <p className={`mx-1 rounded-xl border border-dashed ${t.border} p-3 font-mono text-xs ${t.textFaint}`}>
+                          Next stop — coming soon.
+                        </p>
+                      )}
+                      {entries.map((exp, idx) => {
+                        const current = isActive && idx === mainIdx;
+                        return (
+                          <button
+                            key={`${exp.company}-${idx}`}
+                            type="button"
+                            onClick={() => pickEntry(path.id, idx)}
+                            aria-current={current ? "true" : undefined}
+                            className={`relative w-full text-left flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60 ${
+                              current ? (isDark ? "bg-red-400/10" : "bg-red-50") : isDark ? "hover:bg-white/5" : "hover:bg-slate-50"
+                            }`}
+                          >
+                            <span className={`absolute left-0 top-2 bottom-2 w-0.5 rounded-full transition-colors ${current ? "bg-red-400" : "bg-transparent"}`} />
+                            <span className={`h-9 w-9 shrink-0 overflow-hidden rounded-lg border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-white"} ${t.accent} flex items-center justify-center`}>
+                              {exp.logo ? (
+                                <img src={exp.logo} alt="" className="h-full w-full object-cover" />
+                              ) : (
+                                <PathIcon size={14} />
+                              )}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block font-body text-sm font-medium leading-snug truncate">{exp.company}</span>
+                              <span className={`block font-mono text-[11px] ${t.textFaint} truncate`}>
+                                {exp.position} · {exp.duration}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+
+      <Reveal delay={120} className="col-span-3 md:sticky md:top-24">
+        <div
+          className={`relative overflow-hidden rounded-[28px] p-7 lg:p-10 text-white flex flex-col transition-shadow duration-500 hover:shadow-2xl hover:shadow-red-500/20 ${
+            isDark ? "bg-slate-900 ring-1 ring-white/10" : "bg-slate-950"
+          }`}
+        >
+          <ActiveIcon size={220} className="pointer-events-none absolute -right-14 -bottom-16 text-white/[0.04]" />
+
+          <div className="relative flex flex-wrap items-center gap-3">
+            {main && main === latest && (
+              <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-400/10 px-3 py-1 font-mono text-[11px] tracking-[0.18em] uppercase text-red-300">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
+                  <span className="relative h-2 w-2 rounded-full bg-red-400" />
+                </span>
+                Latest
+              </span>
+            )}
+            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.18em] uppercase text-white/50">
+              <ActiveIcon size={13} /> {active.label}
+            </span>
+            {activeEntries.length > 1 && (
+              <span className="ml-auto font-mono text-[11px] text-white/40">
+                {String(mainIdx + 1).padStart(2, "0")} / {String(activeEntries.length).padStart(2, "0")}
+              </span>
+            )}
+          </div>
+
+          {!main ? (
+            <div key={active.id} className="bento-swap-in relative mt-6">
+              <h3 className="font-display text-3xl lg:text-4xl font-bold leading-tight tracking-tight">{active.label}</h3>
+              <p className="mt-3 font-mono text-sm text-white/50">Next stop — coming soon.</p>
+            </div>
+          ) : (
+            <div key={detailsKey} className="bento-swap-in relative mt-6">
+              <div className="h-16 w-16 lg:h-20 lg:w-20 overflow-hidden rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center">
+                {main.logo ? (
+                  <img src={main.logo} alt={`${main.company} logo`} className="h-full w-full object-cover" />
+                ) : (
+                  <ActiveIcon size={28} />
+                )}
+              </div>
+              <p className="mt-6 font-mono text-xs tracking-wider text-white/50">{main.duration}</p>
+              <h3
+                className={`mt-2 max-w-xl font-display font-bold leading-tight tracking-tight ${
+                  main.company.length > 32 ? "text-xl lg:text-[1.75rem]" : "text-2xl lg:text-4xl"
+                }`}
+              >
+                {main.company}
+              </h3>
+              <p className="mt-2 font-body text-base text-white/80">{main.position}</p>
+              {main.type && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {main.type.split("·").map((tag) => (
+                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] text-white/60">
+                      {tag.trim()}
+                    </span>
+                  ))}
+                </div>
+              )}
+              <ExpDetails
+                id={`exp-${detailsKey}`}
+                open={openExp === detailsKey}
+                onToggle={() => setOpenExp(openExp === detailsKey ? null : detailsKey)}
+                description={main.description}
+                t={t}
+                light
+              />
+            </div>
+          )}
+        </div>
+      </Reveal>
+    </div>
+  );
+}
 
 function EducationCard({ edu, t, isDark }) {
   const { done, total, elapsed, startY, endY } = eduProgress(edu.duration);
@@ -988,7 +1171,6 @@ function EducationCard({ edu, t, isDark }) {
     <div
       className={`card-glow group relative overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-7 sm:p-8 h-full flex flex-col hover:border-red-400/40`}
     >
-      {/* soft red light + giant faded year for depth */}
       <span
         aria-hidden="true"
         className={`pointer-events-none select-none absolute -bottom-6 -right-2 font-display font-bold leading-none text-[8rem] sm:text-[9rem] ${isDark ? "text-white/[0.035]" : "text-slate-900/[0.04]"}`}
@@ -1049,14 +1231,9 @@ function EducationCard({ edu, t, isDark }) {
   );
 }
 
-/* ============================================================
-   Skills page (opened from "View more" in Technical Skills)
-   ============================================================ */
 const ALL_SKILL_ITEMS = SKILLS.flatMap((g) => g.items);
 const pickSkills = (names) => names.map((n) => ALL_SKILL_ITEMS.find((i) => i.name === n)).filter(Boolean);
 
-// Edit this list to match the AI tools you actually use.
-// Logos load from the Simple Icons CDN; if one fails, a monogram tile is shown instead.
 const AI_TOOLING = [
   { name: "Claude", abbr: "CL", icon: "https://cdn.simpleicons.org/claude" },
   { name: "ChatGPT", abbr: "GPT", icon: asset_5fd2cb0e },
@@ -1195,10 +1372,6 @@ function ResumeArchive({ t, onClose, isDark }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  // Convert the embedded data: URIs to blob: URLs once, client-side.
-  // Browsers block top-level navigation to a data: URI opened via target="_blank"
-  // (it silently fails, which is what made "View" feel broken / need a reload).
-  // blob: URLs don't have that restriction.
   useEffect(() => {
     const created = [];
     const withBlobs = RESUME_FILES.map((r) => {
@@ -1274,7 +1447,7 @@ function ResumeArchive({ t, onClose, isDark }) {
 function App() {
   const [isDark, setIsDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [projectTab, setProjectTab] = useState("webapps"); // "webapps" = Software | "labs" = Networking & IT
+  const [projectTab, setProjectTab] = useState("webapps");
   const [projectSearch, setProjectSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [showAllProjects, setShowAllProjects] = useState(false);
@@ -1283,7 +1456,8 @@ function App() {
   const [bootScreenMounted, setBootScreenMounted] = useState(true);
   const [bootBar, setBootBar] = useState(0);
   const [bootPct, setBootPct] = useState(0);
-  const [openExp, setOpenExp] = useState(null); // index of the experience card whose details are open
+  const [openPath, setOpenPath] = useState(() => EXPERIENCE[0]?.pathway || EXPERIENCE_PATHWAYS[0].id);
+  const [openExp, setOpenExp] = useState(null);
 
   const t = isDark ? theme.dark : theme.light;
   const progress = useScrollProgress();
@@ -1301,8 +1475,6 @@ function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Boot / loading screen: fill the progress bar, then fade the overlay out,
-  // then unmount it entirely once the fade transition finishes.
   useEffect(() => {
     const raf = requestAnimationFrame(() => setBootBar(100));
     const hideTimer = setTimeout(() => setBooting(false), 3000);
@@ -1312,7 +1484,6 @@ function App() {
     };
   }, []);
 
-  // Percent counter for the loading screen (ease-out over the same 3s as the boot timer).
   useEffect(() => {
     const start = performance.now();
     let raf;
@@ -1413,7 +1584,6 @@ function App() {
   return (
     <div className={`min-h-screen ${t.bg} ${t.text} transition-colors duration-300`}>
 
-      {/* BOOT / LOADING SCREEN */}
       {bootScreenMounted && (
         <div
           className={`fixed inset-0 z-[70] flex flex-col justify-between overflow-hidden ${t.bg} transition-transform duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${
@@ -1422,7 +1592,6 @@ function App() {
           role="status"
           aria-label="Loading portfolio"
         >
-          {/* top bar */}
           <div className="flex items-center justify-between px-6 sm:px-12 pt-7 sm:pt-10">
             <p className="font-display font-semibold text-lg tracking-tight flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${t.accentBg} animate-blink`} />
@@ -1430,7 +1599,6 @@ function App() {
             </p>
           </div>
 
-          {/* status */}
           <div className="px-6 sm:px-12">
             <p className={`font-mono text-xs sm:text-sm ${t.textMuted} flex items-center gap-2`}>
               <span className="text-red-400">›</span>
@@ -1448,7 +1616,6 @@ function App() {
             </p>
           </div>
 
-          {/* big counter + progress line */}
           <div>
             <div className="px-6 sm:px-12 flex items-end justify-between">
               <p
@@ -1466,8 +1633,6 @@ function App() {
         </div>
       )}
 
-
-      {/* Scroll progress bar */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-transparent" style={{ height: "2px" }}>
         <div
           className="h-full bg-red-400 transition-all duration-150 ease-out"
@@ -1475,7 +1640,6 @@ function App() {
         />
       </div>
 
-      {/* Nav */}
       <header className={`fixed top-0 left-0 right-0 z-40 backdrop-blur-md ${t.navBg} border-b ${t.border}`}>
         <nav className="max-w-6xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
           <button
@@ -1527,7 +1691,6 @@ function App() {
         )}
       </header>
 
-      {/* HERO */}
       <section id="hero" className="relative pt-16 flex items-center overflow-hidden" style={{ minHeight: "92vh" }}>
         <NetworkCanvas isDark={isDark} />
         <div className={`absolute inset-0 ${isDark ? "bg-slate-950/70" : "bg-slate-50/80"}`} />
@@ -1574,7 +1737,6 @@ function App() {
           </Reveal>
         </div>
 
-        {/* scroll cue */}
         <button
           aria-label="Scroll to about"
           onClick={() => scrollToId("about")}
@@ -1584,7 +1746,6 @@ function App() {
         </button>
       </section>
 
-      {/* ABOUT */}
       <section id="about" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
           <Reveal className="lg:col-span-3">
@@ -1624,10 +1785,9 @@ function App() {
 
           <Reveal delay={120} className="lg:col-span-2">
             {(() => {
-              const hackathons = EXPERIENCE.filter((e) => e.position === "Hackathon");
+              const hackathons = EXPERIENCE.filter((e) => e.pathway === "hackathon");
               return (
                 <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                  {/* Projects — dark feature card */}
                   <div className={`group relative overflow-hidden rounded-[28px] p-5 sm:p-7 min-h-[200px] sm:min-h-[240px] flex flex-col justify-end text-white transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-500/20 ${isDark ? "bg-slate-900 ring-1 ring-white/10" : "bg-slate-950"}`}>
                     <div className="relative">
                       <p className="font-display text-6xl sm:text-8xl font-bold leading-none tracking-tight">{ALL_PROJECTS.length}</p>
@@ -1636,7 +1796,6 @@ function App() {
                     </div>
                   </div>
 
-                  {/* Hackathon — soft glass card */}
                   <div className={`group relative overflow-hidden rounded-[28px] border ${t.border} p-5 sm:p-7 min-h-[200px] sm:min-h-[240px] flex flex-col justify-end transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-red-400/15 hover:border-red-400/40 ${isDark ? "bg-slate-900" : "bg-red-50"}`}>
                     <div className="relative">
                       <p className="font-display text-6xl sm:text-8xl font-bold leading-none tracking-tight">{hackathons.length}</p>
@@ -1670,7 +1829,6 @@ function App() {
         </div>
       </section>
 
-      {/* SKILLS */}
       <section id="skills" className={t.bg}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
           <div className="text-center mb-10">
@@ -1685,7 +1843,6 @@ function App() {
             </Reveal>
           </div>
 
-          {/* Single horizontal scrolling line — logos only */}
           <Reveal delay={140}>
             <div className="marquee-mask">
               <div
@@ -1720,7 +1877,6 @@ function App() {
         </div>
       </section>
 
-      {/* PROJECTS (Labs + Web Applications) */}
       <section id="labs" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <div className="text-center mb-10 sm:mb-14">
           <p className={`inline-flex items-center gap-2 font-mono text-xs tracking-widest ${t.accent} mb-3`}>
@@ -1819,7 +1975,6 @@ function App() {
         </div>
       </section>
 
-      {/* CERTIFICATIONS */}
       <section id="certifications" className={t.bg}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
           <SectionHeading
@@ -1837,7 +1992,6 @@ function App() {
               return (
                 <Reveal key={cert.name} delay={i * 80} className="h-full">
                   <div className={`card-glow group relative h-full overflow-hidden rounded-3xl border ${t.border} ${t.surface} p-7 sm:p-9 hover:border-red-400/40`}>
-                    {/* ambient glow + giant faded index */}
                     <span
                       aria-hidden="true"
                       className={`pointer-events-none select-none absolute -bottom-8 right-3 font-display font-bold leading-none text-[9rem] ${isDark ? "text-white/[0.035]" : "text-slate-900/[0.04]"}`}
@@ -1846,7 +2000,6 @@ function App() {
                     </span>
 
                     <div className="relative flex flex-col sm:flex-row sm:items-start gap-6 sm:gap-8">
-                      {/* Badge */}
                       <div className="shrink-0">
                         {cert.image ? (
                           <img src={cert.image} alt={`${cert.name} badge`} className="h-20 min-w-[5rem] w-auto max-w-[11rem] rounded-2xl bg-white object-contain p-3.5 shadow-lg shadow-black/10 ring-1 ring-black/5" />
@@ -1910,86 +2063,141 @@ function App() {
         </div>
       </section>
 
-      {/* EXPERIENCE */}
       <section id="experience" className="max-w-6xl mx-auto px-5 sm:px-8 py-24">
         <SectionHeading
           eyebrow="05 · TIMELINE"
           title="Experience"
-          caption="A timeline of roles and hands-on programs."
+          caption="Four pathways: hackathons, internships, organizations, and work experience."
           icon={Briefcase}
           t={t}
         />
 
-        <div className="relative max-w-3xl mx-auto">
-          {/* Rail */}
-          <div className="absolute top-2 bottom-2 left-[11px] w-px bg-red-400/30" />
+        <ExperienceSplit t={t} isDark={isDark} openExp={openExp} setOpenExp={setOpenExp} />
 
-          <div className="space-y-6">
-            {EXPERIENCE.map((exp, i) => {
-              const RoleIcon = /software/i.test(exp.type) ? Code2 : /network/i.test(exp.type) ? Network : User;
-              const latest = i === 0;
+        <div className="relative md:hidden">
+          <div className="grid gap-4">
+            {EXPERIENCE_PATHWAYS.map((path, pi) => {
+              const PathIcon = PATHWAY_ICONS[path.id] || Briefcase;
+              const entries = EXPERIENCE.filter((e) => e.pathway === path.id);
+              const pathOpen = openPath === path.id;
               return (
-                <Reveal key={exp.position} delay={i * 80} className="relative pl-10">
-                  {/* Node on the rail */}
-                  <span className="absolute left-0 top-6 flex h-6 w-6 items-center justify-center">
-                    {latest && <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/40 animate-ping" />}
+                <Reveal key={path.id} delay={pi * 80} className="relative flex flex-col">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpenPath(pathOpen ? null : path.id);
+                      setOpenExp(null);
+                    }}
+                    aria-expanded={pathOpen}
+                    aria-controls={`exp-path-${path.id}`}
+                    className={`relative w-full text-left rounded-2xl border ${pathOpen ? "border-red-400/40" : t.border} ${t.surface} p-4 flex items-center gap-3 transition-colors hover:border-red-400/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/60`}
+                  >
+                    <div className={`h-10 w-10 shrink-0 rounded-xl border border-red-400/30 bg-red-400/10 ${t.accent} flex items-center justify-center`}>
+                      <PathIcon size={18} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className={`font-mono text-[10px] tracking-[0.2em] uppercase ${t.accent}`}>
+                        Path {String(pi + 1).padStart(2, "0")}
+                      </p>
+                      <h3 className="font-display font-semibold text-base leading-tight">{path.label}</h3>
+                      <p className={`font-body text-xs ${t.textFaint}`}>{path.caption}</p>
+                    </div>
                     <span
-                      className={`relative h-3 w-3 rounded-full ${t.accentBg} dot-glow-red ring-4 ${
-                        isDark ? "ring-slate-950" : "ring-slate-50"
-                      }`}
-                    />
-                  </span>
+                      className={`shrink-0 rounded-full border ${t.border} px-2 py-0.5 font-mono text-[10px] ${t.textMuted}`}
+                      aria-label={`${entries.length} ${entries.length === 1 ? "entry" : "entries"}`}
+                    >
+                      {String(entries.length).padStart(2, "0")}
+                    </span>
+                    <ChevronDown size={18} className={`shrink-0 ${t.textMuted} transition-transform duration-300 ${pathOpen ? "rotate-180" : ""}`} />
+                  </button>
 
-                  <div className={`card-glow rounded-2xl border ${t.border} ${t.surface} p-5 sm:p-6 hover:border-red-400/40`}>
-                    <div className="flex items-start gap-4">
-                      <div className={`h-12 w-12 shrink-0 overflow-hidden rounded-xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50"} ${t.accent} flex items-center justify-center`}>
-                        {exp.logo ? (
-                          <img src={exp.logo} alt={`${exp.company} logo`} className="h-full w-full object-cover" />
-                        ) : (
-                          <RoleIcon size={18} />
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-3 mb-1.5">
-                          <span className={`font-mono text-xs tracking-wider ${t.textMuted}`}>
-                            {exp.duration}
+                  <div
+                    id={`exp-path-${path.id}`}
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${pathOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                  >
+                  <div className="overflow-hidden">
+                  <div className="relative pt-4 pb-1">
+                    <div className="absolute top-4 bottom-2 left-[11px] w-px bg-red-400/30" />
+                    <div className="space-y-4">
+                      {entries.length === 0 && (
+                        <div className="relative pl-9">
+                          <span className="absolute left-0 top-4 flex h-6 w-6 items-center justify-center">
+                            <span className={`relative h-3 w-3 rounded-full border-2 border-red-400/50 ring-4 ${isDark ? "ring-slate-950 bg-slate-950" : "ring-slate-50 bg-slate-50"}`} />
                           </span>
-                          {latest && (
-                            <>
-                              <span className={`h-3 w-px ${isDark ? "bg-slate-700" : "bg-slate-300"}`} />
-                              <span className={`inline-flex items-center gap-1.5 font-mono text-xs ${t.accent}`}>
-                                <span className="h-1.5 w-1.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
-                                Latest
-                              </span>
-                            </>
-                          )}
+                          <div className={`rounded-2xl border border-dashed ${t.border} p-4`}>
+                            <p className={`font-mono text-xs ${t.textFaint}`}>Next stop — coming soon.</p>
+                          </div>
                         </div>
-                        <h3 className="font-display font-semibold text-lg leading-snug">{exp.company}</h3>
-                        <p className={`font-body text-sm ${t.textMuted} mt-0.5`}>{exp.position}</p>
-                      </div>
-                    </div>
+                      )}
 
-                    <button
-                      type="button"
-                      onClick={() => setOpenExp(openExp === i ? null : i)}
-                      aria-expanded={openExp === i}
-                      aria-controls={`exp-details-${i}`}
-                      className={`mt-4 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${t.accent} hover:opacity-80 transition-opacity`}
-                    >
-                      What did I do
-                      <ChevronDown size={14} className={`transition-transform duration-300 ${openExp === i ? "rotate-180" : ""}`} />
-                    </button>
+                      {entries.map((exp, i) => {
+                        const key = `${path.id}-${i}`;
+                        const open = openExp === key;
+                        const RoleIcon = /software/i.test(exp.type) ? Code2 : /network/i.test(exp.type) ? Network : User;
+                        const latest = EXPERIENCE.indexOf(exp) === 0;
+                        return (
+                          <div key={key} className="relative pl-9">
+                            <span className="absolute left-0 top-5 flex h-6 w-6 items-center justify-center">
+                              {latest && <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/40 animate-ping" />}
+                              <span
+                                className={`relative h-3 w-3 rounded-full ${t.accentBg} dot-glow-red ring-4 ${
+                                  isDark ? "ring-slate-950" : "ring-slate-50"
+                                }`}
+                              />
+                            </span>
 
-                    <div
-                      id={`exp-details-${i}`}
-                      className={`grid transition-[grid-template-rows] duration-300 ease-out ${openExp === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-                    >
-                      <div className="overflow-hidden">
-                        <p className={`font-body text-sm leading-relaxed ${t.textMuted} pt-3`}>
-                          {exp.description}
-                        </p>
-                      </div>
+                            <div className={`card-glow rounded-2xl border ${t.border} ${t.surface} p-4 hover:border-red-400/40`}>
+                              <div className="flex items-center gap-3">
+                                <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-xl border ${t.border} ${isDark ? "bg-slate-950/40" : "bg-slate-50"} ${t.accent} flex items-center justify-center`}>
+                                  {exp.logo ? (
+                                    <img src={exp.logo} alt={`${exp.company} logo`} className="h-full w-full object-cover" />
+                                  ) : (
+                                    <RoleIcon size={16} />
+                                  )}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <span className={`block font-mono text-[11px] tracking-wider ${t.textMuted}`}>
+                                    {exp.duration}
+                                  </span>
+                                  {latest && (
+                                    <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] ${t.accent}`}>
+                                      <span className="h-1.5 w-1.5 rounded-full bg-red-400 dot-glow-red animate-pulse" />
+                                      Latest
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <h4 className="font-display font-semibold text-sm leading-snug mt-3">{exp.company}</h4>
+                              <p className={`font-body text-xs ${t.textMuted} mt-0.5`}>{exp.position}</p>
+
+                              <button
+                                type="button"
+                                onClick={() => setOpenExp(open ? null : key)}
+                                aria-expanded={open}
+                                aria-controls={`exp-details-${key}`}
+                                className={`mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${t.accent} hover:opacity-80 transition-opacity`}
+                              >
+                                What did I do
+                                <ChevronDown size={14} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+                              </button>
+
+                              <div
+                                id={`exp-details-${key}`}
+                                className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+                              >
+                                <div className="overflow-hidden">
+                                  <p className={`font-body text-sm leading-relaxed ${t.textMuted} pt-3`}>
+                                    {exp.description || "Details coming soon."}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
+                  </div>
+                  </div>
                   </div>
                 </Reveal>
               );
@@ -2000,7 +2208,6 @@ function App() {
 
       <GithubActivity t={t} isDark={isDark} />
 
-      {/* FOOTER */}
       <footer className={`border-t ${t.border}`}>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className={`font-mono text-xs ${t.textFaint}`}>
@@ -2021,7 +2228,6 @@ function App() {
       {skillsOpen && <SkillsArchive t={t} onClose={closeSkills} isDark={isDark} />}
       {resumesOpen && <ResumeArchive t={t} onClose={closeResumes} isDark={isDark} />}
 
-      {/* Back to top */}
       {showTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -2031,10 +2237,6 @@ function App() {
           <ArrowUp size={18} />
         </button>
       )}
-
-
-
-
 
     </div>
   );

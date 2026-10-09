@@ -58,7 +58,6 @@ section[id] { scroll-margin-top: 88px; }
   animation-direction: reverse;
 }
 
-/* Pause the scroll on hover/focus so it's easy to actually click a skill */
 .marquee-mask:hover .marquee-track,
 .marquee-mask:focus-within .marquee-track {
   animation-play-state: paused;
@@ -75,7 +74,6 @@ section[id] { scroll-margin-top: 88px; }
   }
 }
 
-/* ── Spec-ticker skills strip (ruler ticks + badge chips) ── */
 .ticker-rail {
   position: relative;
   background-image:
@@ -151,7 +149,6 @@ html::-webkit-scrollbar {
   display: none;             
   height: 0;
 }
-/* ── Vertical marquee (scrolling tech-stack icon columns) ── */
 .marquee-mask-y {
   overflow: hidden;
 }
@@ -192,3 +189,7 @@ html::-webkit-scrollbar {
     font-size: 125%;
   }
 }
+
+@keyframes bento-swap-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.bento-swap-in { animation: bento-swap-in 0.45s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .bento-swap-in { animation: none; } }
