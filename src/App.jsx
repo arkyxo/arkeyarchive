@@ -35,6 +35,7 @@ import asset_96851f8e from "./assets/asset-96851f8e.png";
 import asset_5fd2cb0e from "./assets/asset-5fd2cb0e.png";
 import amaLogo from "./assets/ama-logo.png";
 import appBuildersLogo from "./assets/appbuildersph-logo.png";
+import fgwbLogo from "./assets/forgirlswhobuild-logo.png";
 import kuryenteThumb from "./assets/kuryentewatch.png";
 
 function makeIcon(paths) {
@@ -270,7 +271,7 @@ const WEB_APPS_LIST = [
     tags: ["React", "Vite", "JavaScript", "HTML", "Firebase", "TMDb API"],
     github: "https://github.com/arkyxo/CineLookUp",
     docs: "https://drive.google.com/file/d/1XKAlyra-MNK6gRcbQP-T2tMv4SkDx6T6/view?usp=drive_link",
-    view: "https://drive.google.com/file/d/19PUJdJcvxdg1-alfcLY1QttqLZY6BkHT/view?usp=sharing",
+    privateDemo: true,
     thumbnail: asset_f42ac97a,
   },
   {
@@ -299,7 +300,7 @@ const WEB_APPS_LIST = [
     tags: ["HTML", "CSS", "JavaScript", "Python", "React", "Firebase", "Tailwind"],
     github: "https://github.com/EngrPrenz/Salo-sa-SD",
     docs: "#",
-    view: "https://salo-sa-antipolo.web.app/admin-login.html",
+    privateDemo: true,
     thumbnail: asset_3e6b708c,
   },
   {
@@ -453,6 +454,15 @@ const EXPERIENCE = [
       "Provided IT support and hardware troubleshooting, and handled data entry and digital filing for the department — all while studying Computer Engineering full-time.",
   },
   {
+    company: "For Girls Who Build",
+    pathway: "organization",
+    position: "Member",
+    logo: fgwbLogo,
+    duration: "Oct 2026 — Present",
+    type: "Organization · Member",
+    description: "Accepted into the For Girls Who Build community in October 2026.",
+  },
+  {
     company: "Association of Concerned Computer Engineering Students (ACCESS)",
     pathway: "organization",
     position: "Technical Team",
@@ -477,6 +487,25 @@ const EDUCATION = [
     institution: "San Juan National High School",
     duration: "2021 — 2023",
     logo: asset_96851f8e,
+  },
+];
+
+const HERO_SIDES = [
+  {
+    id: "webapps",
+    word: "Websites",
+    tail: "on One Side.",
+    label: "Software",
+    blurb: "Web apps, POS systems and PWAs, from interface to database.",
+    count: WEB_APPS.length,
+  },
+  {
+    id: "labs",
+    word: "Networks",
+    tail: "on the Other.",
+    label: "Networking",
+    blurb: "Subnetting, VLANs, device monitoring and hands-on IT support.",
+    count: LABS.length,
   },
 ];
 
@@ -1389,6 +1418,9 @@ function ProjectArchive({ t, onClose }) {
                     {hasLink(p.view) && (
                       <a href={p.view} target="_blank" rel="noreferrer" aria-label={`${p.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={17} /></a>
                     )}
+                    {p.privateDemo && (
+                      <span role="img" aria-disabled="true" aria-label={`${p.title} live demo unavailable, private project`} title="Live demo unavailable: private project" className="opacity-30 cursor-not-allowed"><ExternalLink size={17} /></span>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -1733,44 +1765,69 @@ function App() {
         <NetworkCanvas isDark={isDark} />
         <div className={`absolute inset-0 ${isDark ? "bg-slate-950/70" : "bg-slate-50/80"}`} />
 
-        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-20 w-full">
-          <Reveal delay={110}>
-            <h1 className={`font-display font-bold tracking-tight text-[clamp(1.5rem,7vw,4.5rem)] leading-[1.05] mb-6 whitespace-nowrap ${t.text}`}>
-              <span className={t.accent}>Websites</span> on One Side.
-              <br />
-              <span className={t.accent}>Networks</span> on the Other.<span className="animate-blink text-red-400">_</span>
-            </h1>
-          </Reveal>
-
-          <Reveal delay={170}>
-            <p className={`font-body text-base sm:text-lg ${t.textMuted} max-w-xl leading-relaxed`}>
-              I build software and understand the network it runs on.
+        <div className="relative max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24 w-full">
+          <Reveal delay={60}>
+            <p className={`mb-10 sm:mb-14 inline-flex items-center gap-2 font-mono text-[11px] sm:text-xs tracking-widest ${t.textFaint}`}>
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-red-400" /> {PROFILE.subrole.toUpperCase()}
             </p>
           </Reveal>
+          <h1 className="sr-only">Websites on One Side. Networks on the Other.</h1>
 
-          <Reveal delay={220}>
-            <div className="mt-9 flex flex-nowrap items-center gap-2 sm:gap-3">
-              <button
-                onClick={openResumes}
-                className="inline-flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-red-400 px-4 sm:px-6 font-body text-xs sm:text-sm font-semibold text-slate-950 shadow-lg shadow-red-400/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-300"
-              >
-                <Download size={15} /> Resume
-              </button>
-              {[
-                { href: PROFILE.github, label: "GitHub", Icon: Github, ext: true },
-                { href: PROFILE.linkedin, label: "LinkedIn", Icon: Linkedin, ext: true },
-                { href: mailtoUrl, label: "Email", Icon: Mail, ext: false },
-              ].map(({ href, label, Icon, ext }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  {...(ext ? { target: "_blank", rel: "noreferrer" } : {})}
-                  className={`flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-2xl border ${t.border} ${t.surface} ${t.textMuted} backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-red-400/60 hover:text-red-400 hover:shadow-lg hover:shadow-red-400/20`}
+          <div className={`grid grid-cols-1 md:grid-cols-2 border-y ${t.border} md:divide-x ${isDark ? "divide-slate-800" : "divide-slate-200"}`}>
+            {HERO_SIDES.map((side, i) => (
+              <Reveal key={side.id} delay={110 + i * 60} className="min-w-0">
+                <div className={`py-10 md:py-14 ${i === 0 ? "md:pr-12" : `border-t ${t.border} md:border-t-0 md:pl-12`}`}>
+                  <p className={`font-mono text-[11px] tracking-widest ${t.textFaint}`}>
+                    {String(i + 1).padStart(2, "0")} / {side.label.toUpperCase()}
+                  </p>
+                  <h2 className="mt-5 font-display font-bold tracking-tight leading-[1.02] text-[clamp(2.75rem,6vw,4.5rem)]">
+                    <span className={t.accent}>{side.word}</span>
+                    <span className={`mt-1 block text-[0.5em] ${t.text}`}>
+                      {side.tail}
+                      {i === HERO_SIDES.length - 1 && <span className="animate-blink text-red-400">_</span>}
+                    </span>
+                  </h2>
+                  <p className={`mt-5 max-w-sm font-body text-sm sm:text-base leading-relaxed ${t.textMuted}`}>{side.blurb}</p>
+                  <button
+                    onClick={() => { switchProjectTab(side.id); scrollToId("labs"); }}
+                    className={`group mt-8 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest ${t.text} transition-colors hover:text-red-400`}
+                  >
+                    {side.label} projects <span className={t.textFaint}>({String(side.count).padStart(2, "0")})</span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-1"><ArrowRight size={14} /></span>
+                  </button>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={240}>
+            <div className="mt-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <p className={`font-body text-base sm:text-lg ${t.textMuted} leading-relaxed`}>
+                I build software and understand the network it runs on.
+              </p>
+              <div className="flex flex-nowrap items-center gap-2 sm:gap-3">
+                <button
+                  onClick={openResumes}
+                  className="inline-flex h-10 sm:h-11 shrink-0 items-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-full bg-red-400 px-4 sm:px-6 font-body text-xs sm:text-sm font-semibold text-slate-950 shadow-lg shadow-red-400/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-red-300"
                 >
-                  <Icon size={18} />
-                </a>
-              ))}
+                  <Download size={15} /> Resume
+                </button>
+                {[
+                  { href: PROFILE.github, label: "GitHub", Icon: Github, ext: true },
+                  { href: PROFILE.linkedin, label: "LinkedIn", Icon: Linkedin, ext: true },
+                  { href: mailtoUrl, label: "Email", Icon: Mail, ext: false },
+                ].map(({ href, label, Icon, ext }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    {...(ext ? { target: "_blank", rel: "noreferrer" } : {})}
+                    className={`flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-2xl border ${t.border} ${t.surface} ${t.textMuted} backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-red-400/60 hover:text-red-400 hover:shadow-lg hover:shadow-red-400/20`}
+                  >
+                    <Icon size={18} />
+                  </a>
+                ))}
+              </div>
             </div>
           </Reveal>
         </div>
@@ -1778,7 +1835,7 @@ function App() {
         <button
           aria-label="Scroll to about"
           onClick={() => scrollToId("about")}
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 flex h-10 w-6 items-start justify-center rounded-full border ${isDark ? "border-slate-600" : "border-slate-300"} pt-2 ${t.textFaint}`}
+          className={`absolute bottom-6 left-1/2 -translate-x-1/2 hidden sm:flex h-10 w-6 items-start justify-center rounded-full border ${isDark ? "border-slate-600" : "border-slate-300"} pt-2 ${t.textFaint}`}
         >
           <span className="h-2 w-1 rounded-full bg-red-400 animate-floaty" />
         </button>
@@ -1994,6 +2051,9 @@ function App() {
                       )}
                       {hasLink(item.view) && (
                         <a href={item.view} target="_blank" rel="noreferrer" aria-label={`${item.title} preview`} className="hover:text-red-400 transition-colors"><ExternalLink size={19} /></a>
+                      )}
+                      {item.privateDemo && (
+                        <span role="img" aria-disabled="true" aria-label={`${item.title} live demo unavailable, private project`} title="Live demo unavailable: private project" className="opacity-30 cursor-not-allowed"><ExternalLink size={19} /></span>
                       )}
                     </div>
                   </div>
