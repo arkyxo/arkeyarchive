@@ -960,7 +960,7 @@ function eduProgress(duration) {
 const initialsOf = (name) =>
   name.replace(/[—–-].*$/, "").split(" ").filter((w) => /^[A-Z]/.test(w)).slice(0, 3).map((w) => w[0]).join("");
 
-function ExpDetails({ id, open, onToggle, description, t, light = false }) {
+function ExpDetails({ id, open, onToggle, description, t, light = false, onWhite = false }) {
   return (
     <>
       <button
@@ -968,14 +968,14 @@ function ExpDetails({ id, open, onToggle, description, t, light = false }) {
         onClick={onToggle}
         aria-expanded={open}
         aria-controls={id}
-        className={`mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${light ? "text-red-300" : t.accent} hover:opacity-80 transition-opacity`}
+        className={`mt-3 inline-flex items-center gap-1.5 font-mono text-xs tracking-wide ${onWhite ? "text-red-600" : light ? "text-red-300" : t.accent} hover:opacity-80 transition-opacity`}
       >
         What did I do
         <ChevronDown size={14} className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
       </button>
       <div id={id} className={`grid transition-[grid-template-rows] duration-300 ease-out ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
         <div className="overflow-hidden">
-          <p className={`font-body text-sm leading-relaxed ${light ? "text-white/70" : t.textMuted} pt-3`}>
+          <p className={`font-body text-sm leading-relaxed ${onWhite ? "text-slate-600" : light ? "text-white/70" : t.textMuted} pt-3`}>
             {description || "Details coming soon."}
           </p>
         </div>
@@ -1101,15 +1101,15 @@ function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
 
       <Reveal delay={120} className="col-span-3 md:sticky md:top-24">
         <div
-          className={`relative overflow-hidden rounded-[28px] p-7 lg:p-10 text-white flex flex-col transition-shadow duration-500 hover:shadow-2xl hover:shadow-red-500/20 ${
-            isDark ? "bg-slate-900 ring-1 ring-white/10" : "bg-slate-950"
+          className={`relative overflow-hidden rounded-[28px] p-7 lg:p-10 flex flex-col transition-shadow duration-500 hover:shadow-2xl hover:shadow-red-500/20 ${
+            isDark ? "bg-white text-slate-900 shadow-xl shadow-black/30" : "bg-slate-950 text-white"
           }`}
         >
-          <ActiveIcon size={220} className="pointer-events-none absolute -right-14 -bottom-16 text-white/[0.04]" />
+          <ActiveIcon size={220} className={`pointer-events-none absolute -right-14 -bottom-16 ${isDark ? "text-slate-900/[0.05]" : "text-white/[0.04]"}`} />
 
           <div className="relative flex flex-wrap items-center gap-3">
             {main && main === latest && (
-              <span className="inline-flex items-center gap-2 rounded-full border border-red-400/40 bg-red-400/10 px-3 py-1 font-mono text-[11px] tracking-[0.18em] uppercase text-red-300">
+              <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[11px] tracking-[0.18em] uppercase ${isDark ? "border-red-500/40 bg-red-500/10 text-red-600" : "border-red-400/40 bg-red-400/10 text-red-300"}`}>
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-red-400/60 animate-ping" />
                   <span className="relative h-2 w-2 rounded-full bg-red-400" />
@@ -1117,11 +1117,11 @@ function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
                 Latest
               </span>
             )}
-            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.18em] uppercase text-white/50">
+            <span className={`inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.18em] uppercase ${isDark ? "text-slate-500" : "text-white/50"}`}>
               <ActiveIcon size={13} /> {active.label}
             </span>
             {activeEntries.length > 1 && (
-              <span className="ml-auto font-mono text-[11px] text-white/40">
+              <span className={`ml-auto font-mono text-[11px] ${isDark ? "text-slate-400" : "text-white/40"}`}>
                 {String(mainIdx + 1).padStart(2, "0")} / {String(activeEntries.length).padStart(2, "0")}
               </span>
             )}
@@ -1130,18 +1130,18 @@ function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
           {!main ? (
             <div key={active.id} className="bento-swap-in relative mt-6">
               <h3 className="font-display text-3xl lg:text-4xl font-bold leading-tight tracking-tight">{active.label}</h3>
-              <p className="mt-3 font-mono text-sm text-white/50">Next stop — coming soon.</p>
+              <p className={`mt-3 font-mono text-sm ${isDark ? "text-slate-500" : "text-white/50"}`}>Next stop — coming soon.</p>
             </div>
           ) : (
             <div key={detailsKey} className="bento-swap-in relative mt-6">
-              <div className="h-16 w-16 lg:h-20 lg:w-20 overflow-hidden rounded-2xl border border-white/10 bg-white/5 flex items-center justify-center">
+              <div className={`h-16 w-16 lg:h-20 lg:w-20 overflow-hidden rounded-2xl border flex items-center justify-center ${isDark ? "border-slate-200 bg-slate-50" : "border-white/10 bg-white/5"}`}>
                 {main.logo ? (
                   <img src={main.logo} alt={`${main.company} logo`} className="h-full w-full object-cover" />
                 ) : (
                   <ActiveIcon size={28} />
                 )}
               </div>
-              <p className="mt-6 font-mono text-xs tracking-wider text-white/50">{main.duration}</p>
+              <p className={`mt-6 font-mono text-xs tracking-wider ${isDark ? "text-slate-500" : "text-white/50"}`}>{main.duration}</p>
               <h3
                 className={`mt-2 max-w-xl font-display font-bold leading-tight tracking-tight ${
                   main.company.length > 32 ? "text-xl lg:text-[1.75rem]" : "text-2xl lg:text-4xl"
@@ -1149,11 +1149,11 @@ function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
               >
                 {main.company}
               </h3>
-              <p className="mt-2 font-body text-base text-white/80">{main.position}</p>
+              <p className={`mt-2 font-body text-base ${isDark ? "text-slate-600" : "text-white/80"}`}>{main.position}</p>
               {main.type && (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {main.type.split("·").map((tag) => (
-                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-[11px] text-white/60">
+                    <span key={tag} className={`rounded-full border px-3 py-1 font-mono text-[11px] ${isDark ? "border-slate-200 bg-slate-100 text-slate-600" : "border-white/10 bg-white/5 text-white/60"}`}>
                       {tag.trim()}
                     </span>
                   ))}
@@ -1165,7 +1165,8 @@ function ExperienceSplit({ t, isDark, openExp, setOpenExp }) {
                 onToggle={() => setOpenExp(openExp === detailsKey ? null : detailsKey)}
                 description={main.description}
                 t={t}
-                light
+                light={!isDark}
+                onWhite={isDark}
               />
             </div>
           )}
