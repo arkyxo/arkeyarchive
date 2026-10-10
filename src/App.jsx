@@ -34,6 +34,7 @@ import asset_39871438 from "./assets/asset-39871438.png";
 import asset_96851f8e from "./assets/asset-96851f8e.png";
 import asset_5fd2cb0e from "./assets/asset-5fd2cb0e.png";
 import amaLogo from "./assets/ama-logo.png";
+import appBuildersLogo from "./assets/appbuildersph-logo.png";
 
 function makeIcon(paths) {
   return function Icon({ size = 24, className = "", ...props }) {
@@ -394,6 +395,16 @@ const EXPERIENCE = [
     duration: "Oct 16 — Nov 27, 2026",
     type: "Networking & IT · Internship",
     description: "",
+  },
+  {
+    company: "AppBuilders PH Hackathon",
+    pathway: "hackathon",
+    position: "Hackathon",
+    logo: appBuildersLogo,
+    duration: "Oct 9 — 10, 2026",
+    type: "Software · Competition",
+    description:
+      "Built and demoed KuryenteWatch with my team in a 24-hour build — a local-first household electricity app (React PWA, Express, SQLite) that reads meter and appliance-label photos with OCR, estimates bills and appliance usage, flags unusual usage jumps, and answers questions through an Energy Assistant that runs on a local Ollama model or fully offline.",
   },
   {
     company: "GCash Hackathon",
