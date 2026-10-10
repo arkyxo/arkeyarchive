@@ -35,6 +35,7 @@ import asset_96851f8e from "./assets/asset-96851f8e.png";
 import asset_5fd2cb0e from "./assets/asset-5fd2cb0e.png";
 import amaLogo from "./assets/ama-logo.png";
 import appBuildersLogo from "./assets/appbuildersph-logo.png";
+import kuryenteThumb from "./assets/kuryentewatch.png";
 
 function makeIcon(paths) {
   return function Icon({ size = 24, className = "", ...props }) {
@@ -245,7 +246,7 @@ const STATUS_STYLES = {
   Planned: { dot: "bg-slate-500", text: "text-slate-400", label: "PLANNED" },
 };
 
-const WEBAPP_CATEGORIES = ["All", "Freelance", "Academic", "Thesis"];
+const WEBAPP_CATEGORIES = ["All", "Freelance", "Academic", "Thesis", "Hackathon"];
 
 const WEB_APPS_LIST = [
   {
@@ -323,10 +324,35 @@ const WEB_APPS_LIST = [
     view: "https://www.roblox.com/games/133137084199842/URSAC-Simulator-Academy",
     thumbnail: asset_9e429332,
   },
-  { ...RFID_PROJECT, category: "Academic" },
+  {
+    title: "KuryenteWatch",
+    eyebrow: "Household Energy App · Hackathon",
+    meta: "Group Project · AppBuilders PH Hackathon · Oct 2026",
+    category: "Hackathon",
+    status: "Completed",
+    description: [
+      "A household electricity tracker built in 24 hours. Snap a photo of your ",
+      { hl: "electric meter" },
+      " or an appliance label and it reads the numbers with ",
+      { hl: "OCR" },
+      ", estimates your bill and appliance usage, flags ",
+      { hl: "unusual usage jumps" },
+      ", and answers energy questions through a local AI assistant. Works offline, and your data stays on your device.",
+    ],
+    highlights: [
+      "Meter and appliance-label photo reading with OCR",
+      "Bill estimates, usage history and usage-jump alerts",
+      "Local AI Energy Assistant (Ollama) with a built-in offline fallback",
+      "Installable PWA that works without internet",
+    ],
+    tags: ["React", "Vite", "Node.js", "Express", "SQLite", "PWA", "Ollama"],
+    github: "https://github.com/dioxaaa/Kuryente-Watch-AppBuilder-Hackaton",
+    view: "https://dist-web-ddfpdfbm.devinapps.com",
+    thumbnail: kuryenteThumb,
+  },
 ];
 
-const SOFTWARE_ORDER = ["URSAC Simulation Academy", "Salo Sa Antipolo", RFID_PROJECT.title, "CineLookUp"];
+const SOFTWARE_ORDER = ["URSAC Simulation Academy", "Salo Sa Antipolo", "KuryenteWatch", "CineLookUp"];
 const WEB_APPS = [...WEB_APPS_LIST].sort((a, b) => SOFTWARE_ORDER.indexOf(a.title) - SOFTWARE_ORDER.indexOf(b.title));
 
 const yearOf = (p) => (p.meta && (p.meta.match(/(\d{4})/) || [])[1]) || "—";
